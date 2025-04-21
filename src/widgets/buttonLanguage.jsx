@@ -1,0 +1,272 @@
+import { useEffect, useState } from "react";
+import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import Trash from "../icons/trash"; // Asegúrate de que esta ruta sea correcta
+import EditIcon from "../icons/edit";
+import Language from "../icons/language";
+import Add from "../icons/new";
+import CloseIcon from "../icons/close";
+import SaveIcon from "../icons/saveIcon";
+
+const url_login = "http://localhost/API/idiomas/idioma.php";
+
+
+const EditableCell = ({
+  editing,
+  dataIndex,
+  title,
+  inputType,
+  record,
+  index,
+  children,
+  ...restProps
+}) => {
+  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  return (
+    <td {...restProps}>
+      {editing ? (
+        <Form.Item
+          name={dataIndex}
+          style={{
+            margin: 0,
+          }}
+          rules={[
+            {
+              required: true,
+              message: `Please Input ${title}!`,
+            },
+          ]}
+        >
+          {inputNode}
+        </Form.Item>
+      ) : (
+        children
+      )}
+    </td>
+  );
+};
+
+const LanguageButton = ({ isOpen }) => {
+  const [isLanguage, setIsLanguage] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
+  const [language, setLanguage] = useState([]);
+  const [form] = Form.useForm();
+
+  const setData = async () => {
+    const response = await fetch(url_login);
+    const data = await response.json();
+    // Ensure each item has a unique key
+    const dataWithKeys = data.map(item => ({
+      ...item,
+      key: item.id || Date.now() // Use existing id or generate a new one
+    }));
+    setLanguage(dataWithKeys);
+  };
+
+  useEffect(() => {
+    setData();
+  }, []); // Agregar dependencias para evitar bucles infinitos
+
+  const [editingKey, setEditingKey] = useState('');
+  const isEditing = (record) => record.key === editingKey;
+
+  const edit = (record) => {
+    form.setFieldsValue({
+      id: '',
+      language: '',
+      costxhour: '',
+      ...record,
+    });
+    setEditingKey(record.key);
+  }
+
+  const cancel = () => {
+    setEditingKey('');
+  }
+
+  const save = async (key) => {
+    try {
+      const row = await form.validateFields();
+      const newData = [...language];
+      const index = newData.findIndex((item) => key === item.key);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        setLanguage(newData);
+        setEditingKey('');
+      } else {
+        newData.push({ key: Date.now(), ...row }); // Ensure new items have a unique key
+        setLanguage(newData);
+        setEditingKey('');
+      }
+    } catch (errInfo) {
+      console.log('Validate Failed:', errInfo);
+    }
+  }
+
+  const deleteLanguage = (key) => {
+    const newData = language.filter((item) => item.key !== key);
+    setLanguage(newData);
+  }
+
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      width: '15%',
+      editable: true,
+    },
+    {
+      title: 'Language',
+      dataIndex: 'language',
+      width: '15%',
+      editable: true,
+    },
+    {
+      title: 'Cost per Hour',
+      dataIndex: 'costxclass',
+      width: '15%',
+      editable: true,
+    },
+    {
+      title: 'Operation',
+      dataIndex: 'operation',
+      width: '5%',
+      render: (_, record) => {
+        const editable = isEditing(record);
+        return (
+          <span>
+            {editable ? (
+              <>
+                <Typography.Link
+                  onClick={() => save(record.key)}
+                  style={{
+                    marginInlineEnd: 8,
+                  }}
+                >
+                  Save
+                </Typography.Link>
+                <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                  <a>Cancel</a>
+                </Popconfirm>
+              </>
+            ) : (
+              <>
+                <div className="flex justify-around">
+                    <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+                    <EditIcon />
+                    </Typography.Link>
+                    <Popconfirm title="Are you sure to delete this language?" onConfirm={() => deleteLanguage(record.key)} >
+                    <Typography.Link>
+                        <Trash />
+                    </Typography.Link>
+                    </Popconfirm>
+                </div>
+              </>
+            )}
+          </span>
+        )
+      },
+    },
+  ]
+
+  const mergedColumns = columns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        inputType: col.dataIndex === 'costxhour' ? 'number' : 'text',
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+      }),
+    }
+  })
+
+  const showLanguages = () => {
+    setIsLanguage(true);
+    isOpen(true);
+  };
+
+  const closeLanguage = () => {
+    setIsLanguage(false);
+    isOpen(false);
+  };
+
+  const showAdd = () => {
+    setIsAdd(true);
+  };
+
+  const closeAdd = () => {
+    setIsAdd(false);
+  };
+
+  const handleAddLanguage = async () => {
+    const values = await form.validateFields();
+    const newLanguage = {
+      key: Date.now(), // Generar un ID único
+      ...values,
+    };
+    setLanguage([...language, newLanguage]);
+    closeAdd();
+  }
+
+  return (
+    <>
+      <button className="btn btn-ghost" onClick={showLanguages}>
+        <Language />
+        <span>Language</span>
+      </button>
+      <dialog open={isLanguage} className="modal">
+        <div className="modal-box w-11/12 max-w-5xl">
+          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+            <Form form={form} component={false}>
+              <Table
+                components={{
+                  body: {
+                    cell: EditableCell,
+                  },
+                }}
+                bordered
+                dataSource={language} // Cambiar data a language
+                columns={mergedColumns}
+                rowClassName="editable-row"
+                pagination={{
+                  onChange: cancel,
+                }}
+              />
+            </Form>
+          </div>
+          <div className="modal-action">
+            <button className="btn" onClick={showAdd}><Add /></button>
+            <dialog open={isAdd} className="modal">
+              <div className="modal-box">
+                <h1 className="text-center">Add Language</h1>
+                <Form form={form} layout="vertical">
+                  <Form.Item name="language" label="Language" rules={[{ required: true, message: 'Please input the language!' }]}>
+                    <Input placeholder="Language" />
+                  </Form.Item>
+                  <Form.Item name="costxhour" label="Cost per Hour" rules={[{ required: true, message: 'Please input the cost!' }]}>
+                    <InputNumber placeholder="Cost per Hour" />
+                  </Form.Item>
+                </Form>
+                <div className="modal-action ml-3">
+                  <button className="btn" onClick={handleAddLanguage}><SaveIcon /></button>
+                  <button className="btn" onClick={closeAdd}><CloseIcon /></button>
+                </div>
+              </div>
+            </dialog>
+            <button className="btn" onClick={closeLanguage}><CloseIcon /></button>
+          </div>
+        </div>
+      </dialog>
+    </>
+  );
+};
+
+export default LanguageButton;
