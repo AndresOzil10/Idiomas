@@ -7,7 +7,7 @@ import TeacherScreen from "../Screens/teacher";
 
 export const router = createBrowserRouter([
     {
-        path: '/rh/',
+        path: '/Idiomas/',
         element: <LoginScreen />,
         errorElement: <NotFound />
     },

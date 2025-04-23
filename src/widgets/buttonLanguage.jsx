@@ -218,13 +218,13 @@ const LanguageButton = ({ isOpen }) => {
 
   return (
     <>
-      <button className="btn btn-ghost" onClick={showLanguages}>
+      <button className="btn btn-ghost rounded-full" onClick={showLanguages}>
         <Language />
         <span>Language</span>
       </button>
       <dialog open={isLanguage} className="modal">
-        <div className="modal-box w-11/12 max-w-5xl">
-          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <div className="modal-box w-11/12 max-w-5xl bg-base-300">
+          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-200">
             <Form form={form} component={false}>
               <Table
                 components={{
