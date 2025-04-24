@@ -223,8 +223,8 @@ const LanguageButton = ({ isOpen }) => {
         <span>Language</span>
       </button>
       <dialog open={isLanguage} className="modal">
-        <div className="modal-box w-11/12 max-w-5xl border border-base-content bg-primary/50 shadow-lg shadow-primary">
-          <div className="overflow-x-auto rounded-box bg-secondary/10 shadow-lg">
+        <div className="modal-box w-11/12 max-w-5xl border border-base-content bg-base-content/50 shadow-lg shadow-primary">
+          <div className="overflow-x-auto rounded-box bg-base-content/10 shadow-lg">
             <Form form={form} component={false}>
               <Table
                 components={{

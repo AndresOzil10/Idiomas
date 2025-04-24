@@ -40,7 +40,7 @@ const GroupButton = ({ isOpen }) => {
                 <span>Level</span>
             </button>
             <dialog open={isGroup} className="modal">
-                <div className="modal-box w-11/12 max-w-7xl border border-base-content bg-primary/50 shadow-lg shadow-primary"> {/* Increased max width */}
+                <div className="modal-box w-11/12 max-w-7xl border border-base-content bg-base-content/50 shadow-lg shadow-primary"> {/* Increased max width */}
                     
                     <TableLevel />
                     <div className="modal-action">

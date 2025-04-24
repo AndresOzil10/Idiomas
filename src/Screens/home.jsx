@@ -26,7 +26,7 @@ const HomeScreen = () => {
             <div className="navbar bg-base-100 shadow-sm">
                 <div className="navbar-start">
                     
-                    <img src={logo} alt="" width={150} height={150} className="bg-info/40"/>
+                    <img src={logo} alt="" width={150} height={150} className="bg-base-content/30"/>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">

@@ -9,9 +9,9 @@ const Graphycs = () => {
                 series={[
                     {
                         data: [
-                            { id: 0, value: 10, label: 'series A', color: '#FF5733' },
-                            { id: 1, value: 15, label: 'series B', color: '#33FF57' },
-                            { id: 2, value: 20, label: 'series C', color: '#3357FF' },
+                            { id: 0, value: 10, label: 'series A', color: '#ebf7f8' },
+                            { id: 1, value: 15, label: 'series B', color: '#88abc2' },
+                            { id: 2, value: 20, label: 'series C', color: '#49708a' },
                         ],
                     },
                 ]}

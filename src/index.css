@@ -2,6 +2,6 @@
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
-    name: "aqua";
+    name: "dim";
     default: true;
   }

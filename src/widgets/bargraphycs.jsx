@@ -20,9 +20,9 @@ const BarGraphycs = () => {
             }}
             xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
             series={[
-                { data: [4, 3, 5], color: '#FF5733' },
-                { data: [1, 6, 3], color: '#33FF57' },
-                { data: [2, 5, 6], color: '#3357FF' }
+                { data: [4, 3, 5], color: '#ebf7f8' },
+                { data: [1, 6, 3], color: '#88abc2' },
+                { data: [2, 5, 6], color: '#49708a' }
             ]}
             width={isSmallScreen ? 650 : 800}
             height={isSmallScreen ? 300 : 400}
