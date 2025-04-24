@@ -1,5 +1,4 @@
-import { axisClasses } from '@mui/x-charts';
-import { PieChart } from '@mui/x-charts/PieChart';
+import {  PieChart } from '@mui/x-charts/PieChart';
 
 const Graphycs = () => { 
     const isSmallScreen = window.innerWidth < 1600;
@@ -7,13 +6,6 @@ const Graphycs = () => {
     return (
         <div className='w-1/2'>
             <PieChart
-                sx={{
-                    [`.${axisClasses.root}`] : {
-                        [`.${axisClasses.tick}, .${axisClasses.tickLabel}`]: {
-                            stroke: 'white',
-                            fill: 'white',
-                    }}
-                }}
                 series={[
                     {
                         data: [
@@ -25,7 +17,14 @@ const Graphycs = () => {
                 ]}
                 width={isSmallScreen ? 650 : 800}
                 height={isSmallScreen ? 300 : 400}
-                
+                slotProps={{
+                    legend: {
+                        sx: {
+                            fontSize: 14,
+                            color: 'white',
+                        },
+                    },
+                }}
             />
         </div>
     );
