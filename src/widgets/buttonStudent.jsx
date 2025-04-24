@@ -74,7 +74,7 @@ const StudentButton = ({isOpen}) => {
             <span>Add New Student </span>
         </button>
         <dialog open={isNewStudent} className="modal">
-            <div className="modal-box">
+            <div className="modal-box border border-base-content bg-primary/50 shadow-lg shadow-primary">
                 <h1 className="text-center">Add Student</h1>
                 <div className="auth-form mb-1">
                     <label>Name:</label>

@@ -223,8 +223,8 @@ const LanguageButton = ({ isOpen }) => {
         <span>Language</span>
       </button>
       <dialog open={isLanguage} className="modal">
-        <div className="modal-box w-11/12 max-w-5xl bg-base-300">
-          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-200">
+        <div className="modal-box w-11/12 max-w-5xl border border-base-content bg-primary/50 shadow-lg shadow-primary">
+          <div className="overflow-x-auto rounded-box bg-secondary/10 shadow-lg">
             <Form form={form} component={false}>
               <Table
                 components={{
@@ -242,10 +242,10 @@ const LanguageButton = ({ isOpen }) => {
               />
             </Form>
           </div>
-          <div className="modal-action">
-            <button className="btn" onClick={showAdd}><Add /></button>
+          <div className="modal-action ">
+            <button className="btn bg-error-content/70" onClick={showAdd}><Add /></button>
             <dialog open={isAdd} className="modal">
-              <div className="modal-box">
+              <div className="modal-box ">
                 <h1 className="text-center">Add Language</h1>
                 <Form form={form} layout="vertical">
                   <Form.Item name="language" label="Language" rules={[{ required: true, message: 'Please input the language!' }]}>
@@ -256,12 +256,12 @@ const LanguageButton = ({ isOpen }) => {
                   </Form.Item>
                 </Form>
                 <div className="modal-action ml-3">
-                  <button className="btn" onClick={handleAddLanguage}><SaveIcon /></button>
-                  <button className="btn" onClick={closeAdd}><CloseIcon /></button>
+                  <button className="btn bg-error-content/70" onClick={handleAddLanguage}><SaveIcon /></button>
+                  <button className="btn bg-error-content/70" onClick={closeAdd}><CloseIcon /></button>
                 </div>
               </div>
             </dialog>
-            <button className="btn" onClick={closeLanguage}><CloseIcon /></button>
+            <button className="btn bg-error-content/70" onClick={closeLanguage}><CloseIcon /></button>
           </div>
         </div>
       </dialog>

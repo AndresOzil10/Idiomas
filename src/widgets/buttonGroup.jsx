@@ -40,15 +40,15 @@ const GroupButton = ({ isOpen }) => {
                 <span>Level</span>
             </button>
             <dialog open={isGroup} className="modal">
-                <div className="modal-box w-11/12 max-w-7xl"> {/* Increased max width */}
+                <div className="modal-box w-11/12 max-w-7xl border border-base-content bg-primary/50 shadow-lg shadow-primary"> {/* Increased max width */}
                     
                     <TableLevel />
                     <div className="modal-action">
-                        <button className="btn" onClick={showAdd}>
+                        <button className="btn bg-error-content/70" onClick={showAdd}>
                             <Add />
                         </button>
                         <dialog open={isAdd} className="modal">
-                            <div className="modal-box w-11/12 max-w-5xl">
+                            <div className="modal-box w-11/12 max-w-5xl bg-primary-300">
                                 <h1 className="text-center">Add User</h1>
                                 <div className="form-control mt-3">
                                     <label>Language:</label>
@@ -78,16 +78,16 @@ const GroupButton = ({ isOpen }) => {
                                 </div>
                                 <input type="time" className="input w-full" />
                                 <div className="modal-action ml-3">
-                                    <button className="btn">
+                                    <button className="btn bg-error-content/70">
                                         <SaveIcon />
                                     </button>
-                                    <button className="btn" onClick={closeAdd}>
+                                    <button className="btn bg-error-content/70" onClick={closeAdd}>
                                         <CloseIcon />
                                     </button>
                                 </div>
                             </div>
                         </dialog>
-                        <button className="btn" onClick={closeGroup}>
+                        <button className="btn bg-error-content/70" onClick={closeGroup}>
                             <CloseIcon />
                         </button>
                     </div>

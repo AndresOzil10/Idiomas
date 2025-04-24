@@ -212,7 +212,7 @@ const TableLevel = () => {
     }
 
     return <>
-        <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <div className="overflow-x-auto rounded-box shadow-lg">
             <Form form={form} component={false}>
                 <Table
                     components={{

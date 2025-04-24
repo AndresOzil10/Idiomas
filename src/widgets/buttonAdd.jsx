@@ -23,8 +23,8 @@ const AddButton = ({isOpen}) => {
             <span>Users</span>
         </button>
         <dialog open={isNewUser} className="modal">
-            <div className="modal-box">
-            <div className="overflow-x-auto">
+            <div className="modal-box border border-base-content bg-primary/50 shadow-primary">
+            <div className="overflow-x-auto bg-secondary/10 shadow-lg">
                     <table className="table">
                         {/* head */}
                         <thead>

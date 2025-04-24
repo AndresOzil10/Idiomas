@@ -1,5 +1,5 @@
 import { useState } from "react"
-import logo from "../assets/images/kayser_logo2.png"
+import logo from "../assets/images/kayser_logo.png"
 import LogoutIcon from "../icons/logoutIcon"
 import UserIcon from "../icons/user"
 import BarGraphycs from "../widgets/bargraphycs"
@@ -26,7 +26,7 @@ const HomeScreen = () => {
             <div className="navbar bg-base-100 shadow-sm">
                 <div className="navbar-start">
                     
-                    <img src={logo} alt="" width={150} height={150} />
+                    <img src={logo} alt="" width={150} height={150} className="bg-info/40"/>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
