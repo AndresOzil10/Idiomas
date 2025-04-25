@@ -18,7 +18,7 @@ const AddButton = ({isOpen}) => {
         }
     
     return <>
-        <button className="btn btn-ghost" onClick={showNewUser}>
+        <button className="btn btn-ghost rounded-full btn-error" onClick={showNewUser}>
             <UsersIcon />
             <span>Users</span>
         </button>

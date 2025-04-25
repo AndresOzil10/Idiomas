@@ -35,7 +35,7 @@ const GroupButton = ({ isOpen }) => {
 
     return (
         <>
-            <button className="btn btn-ghost" onClick={showGroups}>
+            <button className="btn btn-ghost rounded-full btn-error" onClick={showGroups}>
                 <Language />
                 <span>Level</span>
             </button>

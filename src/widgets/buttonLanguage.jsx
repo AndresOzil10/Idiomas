@@ -218,7 +218,7 @@ const LanguageButton = ({ isOpen }) => {
 
   return (
     <>
-      <button className="btn btn-ghost rounded-full" onClick={showLanguages}>
+      <button className="btn btn-ghost rounded-full btn-error" onClick={showLanguages}>
         <Language />
         <span>Language</span>
       </button>

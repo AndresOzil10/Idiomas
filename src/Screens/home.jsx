@@ -23,10 +23,10 @@ const HomeScreen = () => {
     //console.log(modalOpen);
 
         return <>
-            <div className="navbar bg-base-100 shadow-sm">
+            <div className="navbar bg-base-100 shadow-sm ">
                 <div className="navbar-start">
                     
-                    <img src={logo} alt="" width={150} height={150} className="bg-base-content/30"/>
+                    <img src={logo} alt="" width={150} height={150} className="bg-white/45"/>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
@@ -44,13 +44,13 @@ const HomeScreen = () => {
                         </div>
                     </div>
                     <span className="mr-4">mx-asanchez</span>
-                    <button className="btn btn-ghost btn-primary">
+                    <button className="btn btn-ghost btn-error rounded-full" >
                         <LogoutIcon />
                         <span>Logout</span>
                     </button>
                 </div>
             </div>
-            <div className={modalOpen ? "blur-lg" : ""}>
+            <div className="mb-10">
                 <div className="flex justify-center mt-14">
                     <InfoTarjet />
                 </div>
@@ -58,7 +58,7 @@ const HomeScreen = () => {
                     <Graphycs />
                     <BarGraphycs />
                 </div>
-                <div className="flex justify-center mt-14">
+                <div className="flex justify-center ml-30 mt-14 w-[90%] shadow-lg shadow-base-content/30">
                     <TableInfo />
                 </div>
             </div>

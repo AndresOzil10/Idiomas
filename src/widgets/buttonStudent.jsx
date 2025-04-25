@@ -69,7 +69,7 @@ const StudentButton = ({isOpen}) => {
 
 
     return <>
-        <button className="btn btn-ghost" onClick={showStudent}>
+        <button className="btn btn-ghost rounded-full btn-error" onClick={showStudent}>
             <Add />
             <span>Add New Student </span>
         </button>
