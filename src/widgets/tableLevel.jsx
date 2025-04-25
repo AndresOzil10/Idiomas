@@ -1,4 +1,4 @@
-import { Form, Popconfirm, Table, Typography, Input } from "antd"
+import { Form, Popconfirm, Table, Typography, Input, InputNumber } from "antd"
 import { useEffect, useState } from "react"
 import EditIcon from "../icons/edit"
 import Trash from "../icons/trash"
