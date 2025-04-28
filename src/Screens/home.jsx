@@ -10,6 +10,7 @@ import StudentButton from "../widgets/buttonStudent"
 import Graphycs from "../widgets/graphycs"
 import InfoTarjet from "../widgets/infoTarjet"
 import TableInfo from "../widgets/tableInfo"
+import FooterLogin from "../widgets/footer"
 
 
 const HomeScreen = () => { 

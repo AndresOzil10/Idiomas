@@ -118,12 +118,6 @@ const TableUsers = () => {
           editable: true,
         },
         {
-          title: 'Password',
-          dataIndex: 'password',
-          width: '15%',
-          editable: true,
-        },
-        {
             title: 'Nombre',
             dataIndex: 'nombre',
             width: '15%',

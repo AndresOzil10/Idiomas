@@ -74,10 +74,12 @@ const StudentButton = ({isOpen}) => {
             <span>Add New Student </span>
         </button>
         <dialog open={isNewStudent} className="modal">
-            <div className="modal-box border border-base-content bg-base-content/50 shadow-lg shadow-primary">
-                <h1 className="text-center">Add Student</h1>
+            <div className="modal-box border border-base-content bg-base-content/80 shadow-lg shadow-primary">
+                <div className="flex justify-center mb-3 mt-2">
+                    <div className="badge badge-neutral font-bold">Add Student</div>
+                </div>
                 <div className="auth-form mb-1">
-                    <label>Name:</label>
+                    <label className="text-secondary-content">Name:</label>
                 </div>
                 <select defaultValue="Pick a name" className="select w-full" onChange={handleNameChange}>
                     <option disabled={true}>Pick a name</option>
@@ -86,7 +88,7 @@ const StudentButton = ({isOpen}) => {
                     ))}
                 </select>
                 <div className="auth-form mb-1 mt-3">
-                    <label>Language:</label>
+                    <label className="text-secondary-content">Language:</label>
                 </div>
                 <select defaultValue="Pick a language" className="select w-full" onChange={handleLanguageChange}>
                     <option disabled={true}>Pick a language</option>
@@ -95,7 +97,7 @@ const StudentButton = ({isOpen}) => {
                     ))}
                 </select>
                 <div className="auth-form mb-1 mt-3">
-                    <label>Group:</label>
+                    <label className="text-secondary-content">Group:</label>
                 </div>
                 <select defaultValue="Pick a group" className="select w-full" onChange={handleGroupChange}>
                     <option disabled={true}>Pick a group</option>
