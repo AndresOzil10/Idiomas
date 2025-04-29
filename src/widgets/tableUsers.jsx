@@ -49,14 +49,16 @@ const TableUsers = () => {
     const [form] = Form.useForm()
     
     const fetchData = async () => {
+      if (group.length === 0) { // Verificar si los datos ya fueron cargados
         const response = await fetch(url_login)
         const data = await response.json()
         const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }))
         setGroup(dataWithKeys)
+      }
     }
     
     useEffect(() => {
-        fetchData()
+      fetchData()
     }, [])
     
     const [editingKey, setEditingKey] = useState('');

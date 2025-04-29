@@ -33,7 +33,7 @@ const AddButton = ({isOpen}) => {
             <span>Users</span>
         </button>
         <dialog open={isNewUser} className="modal">
-            <div className="modal-box w-11/12 max-w-7xl h-[400px] border border-base-content bg-base-content/50 shadow-primary shadow-lg">
+            <div className="modal-box w-11/12 max-w-5xl h-[420px] border border-base-content bg-base-content/50 shadow-primary shadow-lg">
                 <div className="overflow-x-auto bg-base-content/10 shadow-lg">
                     <TableUsers />
                 </div>

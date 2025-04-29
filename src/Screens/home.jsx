@@ -10,7 +10,6 @@ import StudentButton from "../widgets/buttonStudent"
 import Graphycs from "../widgets/graphycs"
 import InfoTarjet from "../widgets/infoTarjet"
 import TableInfo from "../widgets/tableInfo"
-import FooterLogin from "../widgets/footer"
 
 
 const HomeScreen = () => { 
@@ -60,7 +59,7 @@ const HomeScreen = () => {
                     <BarGraphycs />
                 </div>
                 <div className="flex justify-center ml-30 mt-14 w-[90%] shadow-lg shadow-base-content/30">
-                    <TableInfo />
+                    {/* <TableInfo /> */}
                 </div>
             </div>
         </>

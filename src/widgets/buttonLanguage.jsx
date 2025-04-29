@@ -7,7 +7,21 @@ import Add from "../icons/new";
 import CloseIcon from "../icons/close";
 import SaveIcon from "../icons/saveIcon";
 
-const url_login = "http://localhost/API/idiomas/idioma.php";
+const url_login = "http://localhost/API/idiomas/idioma.php"
+const url_add = "http://localhost/API/idiomas/functions.php"
+
+const enviarData = async (url, data) => {
+  const resp = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+          'Content-Type' : 'application/json'
+      }
+  })
+  const json = await resp.json()
+
+  return  json
+}
 
 
 const EditableCell = ({
@@ -42,8 +56,7 @@ const EditableCell = ({
         children
       )}
     </td>
-  );
-};
+)}
 
 const LanguageButton = ({ isOpen }) => {
   const [isLanguage, setIsLanguage] = useState(false);
@@ -206,14 +219,21 @@ const LanguageButton = ({ isOpen }) => {
     setIsAdd(false);
   };
 
+  const [newLanguage, setNewLanguage] = useState('');
+  const [newCost, setNewCost] = useState('');
+
   const handleAddLanguage = async () => {
-    const values = await form.validateFields();
-    const newLanguage = {
-      key: Date.now(), // Generar un ID único
-      ...values,
-    };
-    setLanguage([...language, newLanguage]);
-    closeAdd();
+    //console.log('Language:', newLanguage);
+    //console.log('Cost per Hour:', newCost);
+
+    const newLanguageData = {
+      "aksi": "addLanguage",
+      "language": newLanguage,
+      "costxclass": newCost,
+    }
+    //console.log(newLanguageData)
+    const respuesta = await enviarData(url_add, newLanguageData)
+    console.log(respuesta.success)
   }
 
   return (
@@ -233,7 +253,7 @@ const LanguageButton = ({ isOpen }) => {
                   },
                 }}
                 bordered
-                dataSource={language} // Cambiar data a language
+                dataSource={language}
                 columns={mergedColumns}
                 rowClassName="editable-row"
                 pagination={{
@@ -247,14 +267,28 @@ const LanguageButton = ({ isOpen }) => {
             <dialog open={isAdd} className="modal">
               <div className="modal-box ">
                 <h1 className="text-center">Add Language</h1>
-                <Form form={form} layout="vertical">
-                  <Form.Item name="language" label="Language" rules={[{ required: true, message: 'Please input the language!' }]}>
-                    <Input placeholder="Language" />
-                  </Form.Item>
-                  <Form.Item name="costxhour" label="Cost per Hour" rules={[{ required: true, message: 'Please input the cost!' }]}>
-                    <InputNumber placeholder="Cost per Hour" />
-                  </Form.Item>
-                </Form>
+                <div className="form-control mt-3">
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">Language:</legend>
+                    <input
+                      type="text"
+                      className="input"
+                      placeholder="Language"
+                      value={newLanguage}
+                      onChange={(e) => setNewLanguage(e.target.value)}
+                    />
+                  </fieldset>
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">Cost per Hour:</legend>
+                    <input
+                      type="text"
+                      className="input"
+                      placeholder="Cost per Hour"
+                      value={newCost}
+                      onChange={(e) => setNewCost(e.target.value)}
+                    />
+                  </fieldset>
+                </div>
                 <div className="modal-action ml-3">
                   <button className="btn bg-error-content/70" onClick={handleAddLanguage}><SaveIcon /></button>
                   <button className="btn bg-error-content/70" onClick={closeAdd}><CloseIcon /></button>
