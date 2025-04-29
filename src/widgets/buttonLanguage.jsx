@@ -6,6 +6,7 @@ import Language from "../icons/language";
 import Add from "../icons/new";
 import CloseIcon from "../icons/close";
 import SaveIcon from "../icons/saveIcon";
+import Swal from "sweetalert2";
 
 const url_login = "http://localhost/API/idiomas/idioma.php"
 const url_add = "http://localhost/API/idiomas/functions.php"
@@ -33,7 +34,7 @@ const EditableCell = ({
   index,
   children,
   ...restProps
-}) => {
+  }) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
   return (
     <td {...restProps}>
@@ -67,17 +68,16 @@ const LanguageButton = ({ isOpen }) => {
   const setData = async () => {
     const response = await fetch(url_login);
     const data = await response.json();
-    // Ensure each item has a unique key
-    const dataWithKeys = data.map(item => ({
-      ...item,
-      key: item.id || Date.now() // Use existing id or generate a new one
-    }));
+    const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }));
     setLanguage(dataWithKeys);
-  };
+  }
+
 
   useEffect(() => {
-    setData();
-  }, []); // Agregar dependencias para evitar bucles infinitos
+    if (!isAdd) {
+      setData(); // Actualizar la tabla cuando se cierre el modal de agregar
+    }
+  }, [isAdd]);
 
   const [editingKey, setEditingKey] = useState('');
   const isEditing = (record) => record.key === editingKey;
@@ -204,20 +204,20 @@ const LanguageButton = ({ isOpen }) => {
   const showLanguages = () => {
     setIsLanguage(true);
     isOpen(true);
-  };
+  }
 
   const closeLanguage = () => {
     setIsLanguage(false);
     isOpen(false);
-  };
+  }
 
   const showAdd = () => {
     setIsAdd(true);
-  };
+  }
 
   const closeAdd = () => {
     setIsAdd(false);
-  };
+  }
 
   const [newLanguage, setNewLanguage] = useState('');
   const [newCost, setNewCost] = useState('');
@@ -233,7 +233,18 @@ const LanguageButton = ({ isOpen }) => {
     }
     //console.log(newLanguageData)
     const respuesta = await enviarData(url_add, newLanguageData)
-    console.log(respuesta.success)
+    if(respuesta.error){
+      Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: respuesta.error,
+        });
+    }
+    Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: respuesta.success,
+    })
   }
 
   return (
