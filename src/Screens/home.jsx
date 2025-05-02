@@ -1,5 +1,5 @@
 import { useState } from "react"
-import logo from "../assets/images/kayser_logo.png"
+import logo from "../assets/images/kayser_logo.webp"
 import LogoutIcon from "../icons/logoutIcon"
 import UserIcon from "../icons/user"
 import BarGraphycs from "../widgets/bargraphycs"

@@ -1,4 +1,4 @@
-import logo from "../assets/images/kayser_logo2.png"
+import logo from "../assets/images/kayser_logo.webp"
 import fondo from "../assets/images/fondo.jpg"
 import gif from "../assets/gif/password.gif"
 import user from "../assets/gif/user.gif"
