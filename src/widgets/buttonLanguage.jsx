@@ -120,8 +120,9 @@ const LanguageButton = ({ isOpen }) => {
   }
 
   const deleteLanguage = (key) => {
-    const newData = language.filter((item) => item.key !== key);
-    setLanguage(newData);
+    console.log(key);
+    // const newData = language.filter((item) => item.key !== key);
+    // setLanguage(newData);
   }
 
   const columns = [
@@ -171,7 +172,7 @@ const LanguageButton = ({ isOpen }) => {
                     <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
                     <EditIcon />
                     </Typography.Link>
-                    <Popconfirm title="Are you sure to delete this language?" onConfirm={() => deleteLanguage(record.key)} >
+                    <Popconfirm title="Are you sure to delete this language?" onConfirm={() => deleteLanguage(record.id)} >
                     <Typography.Link>
                         <Trash />
                     </Typography.Link>
