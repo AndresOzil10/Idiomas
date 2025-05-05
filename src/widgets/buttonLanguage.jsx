@@ -119,10 +119,28 @@ const LanguageButton = ({ isOpen }) => {
     }
   }
 
-  const deleteLanguage = (key) => {
-    console.log(key);
-    // const newData = language.filter((item) => item.key !== key);
-    // setLanguage(newData);
+  const deleteLanguage = async (key) => {
+    // console.log(key);
+
+    const Deleted = {
+      "aksi": "deletedLanguage",
+      "id": key,
+    }
+    //console.log(newLanguageData)
+    const respuesta = await enviarData(url_add, Deleted)
+    if(respuesta.error){
+      Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: respuesta.error,
+        });
+    }
+    Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: respuesta.success,
+    })
+    
   }
 
   const columns = [
