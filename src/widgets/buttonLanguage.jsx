@@ -128,18 +128,18 @@ const LanguageButton = ({ isOpen }) => {
     }
     //console.log(newLanguageData)
     const respuesta = await enviarData(url_add, Deleted)
-    if(respuesta.error){
+      if(respuesta.error){
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: respuesta.error,
+          });
+      }
       Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: respuesta.error,
-        });
-    }
-    Swal.fire({
-        icon: 'success',
-        title: 'Éxito',
-        text: respuesta.success,
-    })
+          icon: 'success',
+          title: 'Éxito',
+          text: respuesta.success,
+      })
     
   }
 
@@ -242,15 +242,13 @@ const LanguageButton = ({ isOpen }) => {
   const [newCost, setNewCost] = useState('');
 
   const handleAddLanguage = async () => {
-    //console.log('Language:', newLanguage);
-    //console.log('Cost per Hour:', newCost);
 
     const newLanguageData = {
       "aksi": "addLanguage",
       "language": newLanguage,
       "costxclass": newCost,
     }
-    //console.log(newLanguageData)
+
     const respuesta = await enviarData(url_add, newLanguageData)
     if(respuesta.error){
       Swal.fire({
@@ -264,6 +262,8 @@ const LanguageButton = ({ isOpen }) => {
         title: 'Éxito',
         text: respuesta.success,
     })
+    setNewLanguage('');
+    setNewCost('');
   }
 
   return (
@@ -273,8 +273,8 @@ const LanguageButton = ({ isOpen }) => {
         <span>Language</span>
       </button>
       <dialog open={isLanguage} className="modal">
-        <div className="modal-box w-11/12 max-w-5xl border border-base-content bg-base-content/50 shadow-lg shadow-primary">
-          <div className="overflow-x-auto rounded-box bg-base-content/10 shadow-lg">
+        <div className="modal-box w-11/12 max-w-5xl border border-base-content bg-base-100 shadow-lg shadow-primary">
+          <div className="overflow-x-auto rounded-box shadow-lg">
             <Form form={form} component={false}>
               <Table
                 components={{
@@ -293,7 +293,7 @@ const LanguageButton = ({ isOpen }) => {
             </Form>
           </div>
           <div className="modal-action ">
-            <button className="btn bg-error-content/70" onClick={showAdd}><Add /></button>
+            <button className="btn bg-primary" onClick={showAdd}><Add /></button>
             <dialog open={isAdd} className="modal">
               <div className="modal-box ">
                 <h1 className="text-center">Add Language</h1>
@@ -320,12 +320,12 @@ const LanguageButton = ({ isOpen }) => {
                   </fieldset>
                 </div>
                 <div className="modal-action ml-3">
-                  <button className="btn bg-error-content/70" onClick={handleAddLanguage}><SaveIcon /></button>
-                  <button className="btn bg-error-content/70" onClick={closeAdd}><CloseIcon /></button>
+                  <button className="btn bg-success" onClick={handleAddLanguage}><SaveIcon /></button>
+                  <button className="btn bg-error" onClick={closeAdd}><CloseIcon /></button>
                 </div>
               </div>
             </dialog>
-            <button className="btn bg-error-content/70" onClick={closeLanguage}><CloseIcon /></button>
+            <button className="btn bg-error" onClick={closeLanguage}><CloseIcon /></button>
           </div>
         </div>
       </dialog>

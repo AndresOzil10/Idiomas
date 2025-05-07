@@ -9,22 +9,14 @@ const Graphycs = () => {
                 series={[
                     {
                         data: [
-                            { id: 0, value: 10, label: 'series A', color: '#ebf7f8' },
-                            { id: 1, value: 15, label: 'series B', color: '#88abc2' },
-                            { id: 2, value: 20, label: 'series C', color: '#49708a' },
+                            { id: 0, value: 10, label: 'series A', color: '#000000' },
+                            { id: 1, value: 15, label: 'series B', color: '#525252' },
+                            { id: 2, value: 20, label: 'series C', color: '#c4c8c5' },
                         ],
                     },
                 ]}
                 width={isSmallScreen ? 650 : 800}
                 height={isSmallScreen ? 300 : 400}
-                slotProps={{
-                    legend: {
-                        sx: {
-                            fontSize: 14,
-                            color: 'white',
-                        },
-                    },
-                }}
             />
         </div>
     );

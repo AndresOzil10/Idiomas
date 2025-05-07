@@ -34,7 +34,7 @@ const LoginScreen = () => {
                             
                         </div>
                                 
-                        <button className="my-7 btn btn-soft btn-accent btn-block">LogIn</button>
+                        <button className="my-7 btn btn-soft btn-secondary btn-block">LogIn</button>
                         
                         
                     </form>

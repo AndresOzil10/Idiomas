@@ -33,12 +33,12 @@ const AddButton = ({isOpen}) => {
             <span>Users</span>
         </button>
         <dialog open={isNewUser} className="modal">
-            <div className="modal-box w-11/12 max-w-5xl h-[420px] border border-base-content bg-base-content/50 shadow-primary shadow-lg">
-                <div className="overflow-x-auto bg-base-content/10 shadow-lg">
+            <div className="modal-box w-11/12 max-w-5xl h-[420px] border border-base-content bg-base-100 shadow-primary shadow-lg">
+                <div className="overflow-x-auto shadow-lg">
                     <TableUsers />
                 </div>
                 <div className="modal-action ml-3">
-                    <button className="btn" onClick={showAdd}><Add/></button>
+                    <button className="btn btn-primary" onClick={showAdd}><Add/></button>
                     <dialog open={isAdd} className="modal">
                         <div className="modal-box w-1/4 max-w-5xl bg-primary-300">
                             <h1 className="text-center">Add User</h1>
@@ -62,16 +62,16 @@ const AddButton = ({isOpen}) => {
                                 </fieldset>
                             </div>
                             <div className="modal-action ml-3">
-                                <button className="btn bg-error-content/70">
+                                <button className="btn bg-accent">
                                     <SaveIcon />
                                 </button>
-                                <button className="btn bg-error-content/70" onClick={closeAdd}>
+                                <button className="btn bg-secondary" onClick={closeAdd}>
                                     <CloseIcon />
                                 </button>
                             </div>
                         </div>
                     </dialog>
-                    <button className="btn" onClick={closeNewUser}><CloseIcon /></button>
+                    <button className="btn btn-error" onClick={closeNewUser}><CloseIcon /></button>
                 </div>
             </div>
         </dialog>

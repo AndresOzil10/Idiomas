@@ -2,6 +2,6 @@
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
-    name: "dim";
+    name: "pastel";
     default: true;
   }

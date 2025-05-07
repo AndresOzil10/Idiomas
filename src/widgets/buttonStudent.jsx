@@ -74,9 +74,9 @@ const StudentButton = ({isOpen}) => {
             <span>Add New Student </span>
         </button>
         <dialog open={isNewStudent} className="modal">
-            <div className="modal-box border border-base-content bg-base-content/80 shadow-lg shadow-primary">
+            <div className="modal-box border border-base-content bg-base-100 shadow-lg shadow-primary">
                 <div className="flex justify-center mb-3 mt-2">
-                    <div className="badge badge-neutral font-bold">Add Student</div>
+                    <div className="badge badge-secondary font-bold">Add Student</div>
                 </div>
                 <div className="auth-form mb-1">
                     <label className="text-secondary-content">Name:</label>
@@ -106,8 +106,8 @@ const StudentButton = ({isOpen}) => {
                     ))}
                 </select>
                 <div className="modal-action ml-3">
-                    <button className="btn" onClick={Save}><SaveIcon/></button>
-                    <button className="btn" onClick={closeStudents}><CloseIcon /></button>
+                    <button className="btn btn-accent" onClick={Save}><SaveIcon/></button>
+                    <button className="btn btn-secondary" onClick={closeStudents}><CloseIcon /></button>
                 </div>
             </div>
         </dialog>
