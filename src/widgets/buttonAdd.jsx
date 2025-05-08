@@ -1,13 +1,33 @@
-import { useState } from "react";
+import { useState } from "react"
 import Add from "../icons/new"
-import UsersIcon from "../icons/users";
-import CloseIcon from "../icons/close";
-import SaveIcon from "../icons/saveIcon";
-import TableUsers from "./tableUsers";
+import UsersIcon from "../icons/users"
+import CloseIcon from "../icons/close"
+import SaveIcon from "../icons/saveIcon"
+import TableUsers from "./tableUsers"
+import Swal from "sweetalert2"
+
+const url_add = "http://localhost/API/idiomas/functions.php"
+
+const enviarData = async (url, data) => {
+  const resp = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+          'Content-Type' : 'application/json'
+      }
+  })
+  const json = await resp.json()
+
+  return  json
+}
 
 const AddButton = ({isOpen}) => { 
     const [isNewUser, setIsNewUser] = useState(false)
     const [isAdd, setIsAdd] = useState(false)
+    const [user, setUser] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [newName, setNewName] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
              
         const showNewUser = () => {
             setIsNewUser(true)
@@ -26,6 +46,55 @@ const AddButton = ({isOpen}) => {
         const closeAdd = () => {
             setIsAdd(false)
         }
+
+        const handleChangeUser = (e) => {
+            setUser(e.target.value)
+        }
+
+        const handleChangePassword = (e) => {
+            setNewPassword(e.target.value)
+        }
+
+        const handleChangeName = (e) => {
+            setNewName(e.target.value)
+        }
+
+    const handleAddTeacherUser = async () => {
+        setIsLoading(true)
+        if(user === '' || newPassword === '' || newName === ''){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please fill all fields',
+            });
+            setIsLoading(false)
+            return
+        }
+        const newTeacherUser = {
+          "aksi": "addTeacherUser",
+          "user": user,
+          "password": newPassword,
+          "name": newName,
+        }
+    
+        const respuesta = await enviarData(url_add, newTeacherUser)
+        if(respuesta.error){
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: respuesta.error,
+            });
+        }
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: respuesta.success,
+        })
+        setNewName('')
+        setUser('')
+        setNewPassword('') 
+        setIsLoading(false)
+      }
     
     return <>
         <button className="btn btn-ghost rounded-full btn-error" onClick={showNewUser}>
@@ -33,7 +102,7 @@ const AddButton = ({isOpen}) => {
             <span>Users</span>
         </button>
         <dialog open={isNewUser} className="modal">
-            <div className="modal-box w-11/12 max-w-5xl h-[420px] border border-base-content bg-base-100 shadow-primary shadow-lg">
+            <div className="modal-box w-11/12 max-w-5xl border border-base-content bg-base-100 shadow-primary shadow-lg">
                 <div className="overflow-x-auto shadow-lg">
                     <TableUsers />
                 </div>
@@ -45,25 +114,34 @@ const AddButton = ({isOpen}) => {
                             <div className="form-control mt-3">
                                 <fieldset className="fieldset">
                                     <legend className="fieldset-legend">Username:</legend>
-                                    <input type="text" className="input" placeholder="My awesome page" />
+                                    <input 
+                                        type="text" 
+                                        className="input" 
+                                        placeholder="My awesome page" 
+                                        onChange={handleChangeUser} 
+                                    />
                                 </fieldset>
                             </div>
                             
                             <div className="form-control mt-3">
                                 <fieldset className="fieldset">
                                     <legend className="fieldset-legend">Password:</legend>
-                                    <input type="text" className="input" placeholder="My awesome page" />
+                                    <input type="text" className="input" placeholder="My awesome page" onChange={handleChangePassword} />
                                 </fieldset>
                             </div>
                             <div className="form-control mt-3">
                                 <fieldset className="fieldset">
                                     <legend className="fieldset-legend">Nombre:</legend>
-                                    <input type="text" className="input" placeholder="My awesome page" />
+                                    <input type="text" className="input" placeholder="My awesome page" onChange={handleChangeName} />
                                 </fieldset>
                             </div>
                             <div className="modal-action ml-3">
-                                <button className="btn bg-accent">
-                                    <SaveIcon />
+                                <button 
+                                    className="btn bg-accent" 
+                                    onClick={handleAddTeacherUser} 
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? <span className="loading loading-spinner"></span> : <SaveIcon />}
                                 </button>
                                 <button className="btn bg-secondary" onClick={closeAdd}>
                                     <CloseIcon />

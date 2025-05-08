@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
-import Trash from "../icons/trash"; // Asegúrate de que esta ruta sea correcta
-import EditIcon from "../icons/edit";
-import Language from "../icons/language";
-import Add from "../icons/new";
-import CloseIcon from "../icons/close";
-import SaveIcon from "../icons/saveIcon";
-import Swal from "sweetalert2";
+import { useEffect, useState } from "react"
+import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd"
+import Trash from "../icons/trash" // Asegúrate de que esta ruta sea correcta
+import EditIcon from "../icons/edit"
+import Language from "../icons/language"
+import Add from "../icons/new"
+import CloseIcon from "../icons/close"
+import SaveIcon from "../icons/saveIcon"
+import Swal from "sweetalert2"
 
 const url_login = "http://localhost/API/idiomas/idioma.php"
 const url_add = "http://localhost/API/idiomas/functions.php"
@@ -64,6 +64,7 @@ const LanguageButton = ({ isOpen }) => {
   const [isAdd, setIsAdd] = useState(false);
   const [language, setLanguage] = useState([]);
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false)
 
   const setData = async () => {
     const response = await fetch(url_login);
@@ -242,6 +243,16 @@ const LanguageButton = ({ isOpen }) => {
   const [newCost, setNewCost] = useState('');
 
   const handleAddLanguage = async () => {
+    setIsLoading(true)
+    if (newLanguage === '' || newCost === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please fill all fields',
+      });
+      setIsLoading(false)
+      return
+    }
 
     const newLanguageData = {
       "aksi": "addLanguage",
@@ -262,8 +273,9 @@ const LanguageButton = ({ isOpen }) => {
         title: 'Éxito',
         text: respuesta.success,
     })
-    setNewLanguage('');
-    setNewCost('');
+    setNewLanguage('')
+    setNewCost('')
+    setIsLoading(false)
   }
 
   return (
@@ -320,7 +332,13 @@ const LanguageButton = ({ isOpen }) => {
                   </fieldset>
                 </div>
                 <div className="modal-action ml-3">
-                  <button className="btn bg-success" onClick={handleAddLanguage}><SaveIcon /></button>
+                  <button 
+                    className="btn bg-accent" 
+                    onClick={handleAddLanguage} 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <span className="loading loading-spinner"></span> : <SaveIcon />}
+                  </button>
                   <button className="btn bg-error" onClick={closeAdd}><CloseIcon /></button>
                 </div>
               </div>

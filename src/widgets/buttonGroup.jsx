@@ -68,6 +68,7 @@ const GroupButton = ({ isOpen }) => {
     const [isLanguage, setIsLanguage] = useState(false)
     const [group, setGroup] = useState([])
     const [form] = Form.useForm()
+    const [isLoading, setIsLoading] = useState(false)
     
     const setData = async () => {
         const response = await fetch(url_language)
@@ -273,6 +274,16 @@ const GroupButton = ({ isOpen }) => {
     const [days, setDays] = useState("")
 
     const handleAddGroup = async () => {
+        setIsLoading(true)
+        if(language === '' || level === '' || schedule === '' || from === '' || days === ''){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please fill all fields',
+            });
+            setIsLoading(false)
+            return
+        }
         const newGroupAdd = {
               "aksi": "addGroup",
               "language": language,
@@ -300,6 +311,7 @@ const GroupButton = ({ isOpen }) => {
         setDays('')
         setSchedule('')
         setFrom('')
+        setIsLoading(false)
     }
 
     return (
@@ -379,8 +391,12 @@ const GroupButton = ({ isOpen }) => {
                                 </div>
                                 <input type="time" className="input w-full" value={from} onChange={(e) => setFrom(e.target.value)}/>
                                 <div className="modal-action ml-3">
-                                    <button className="btn bg-success" onClick={handleAddGroup}>
-                                        <SaveIcon/>
+                                  <button 
+                                    className="btn bg-accent" 
+                                    onClick={handleAddGroup} 
+                                    disabled={isLoading}
+                                  >
+                                        {isLoading ? <span className="loading loading-spinner"></span> : <SaveIcon />}
                                     </button>
                                     <button className="btn bg-error" onClick={closeAdd}>
                                         <CloseIcon />

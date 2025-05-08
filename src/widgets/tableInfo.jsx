@@ -55,7 +55,7 @@ const  TableInfo = () => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [fetchData])
     
     const edit = (record) => {
         form.setFieldsValue({
