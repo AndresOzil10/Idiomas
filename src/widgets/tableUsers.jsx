@@ -19,7 +19,7 @@ const enviarData = async (url, data) => {
   });
   const json = await resp.json();
   return json;
-};
+}
 
 const TableUsers = () => {
   const [group, setGroup] = useState([]);
@@ -34,7 +34,7 @@ const TableUsers = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const [editingKey, setEditingKey] = useState('');
   const isEditing = (record) => record.key === editingKey;
