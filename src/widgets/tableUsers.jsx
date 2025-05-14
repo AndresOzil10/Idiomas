@@ -30,7 +30,7 @@ const TableUsers = () => {
     const data = await response.json();
     const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }));
     setGroup(dataWithKeys);
-  };
+  }
 
   useEffect(() => {
     fetchData();

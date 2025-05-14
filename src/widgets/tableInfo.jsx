@@ -3,8 +3,10 @@ import { Form, Input, InputNumber, Popconfirm, Table, Typography } from 'antd';
 import EditIcon from '../icons/edit';
 import CheckIcon from './checkIcon';
 import CloseIcon from '../icons/close';
+import Trash from '../icons/trash';
 
 const url_login = "http://localhost/API/idiomas/class.php"
+const url = "http://localhost/API/idiomas/functions.php"
 const EditableCell = ({
     editing,
     dataIndex,
@@ -38,7 +40,19 @@ const EditableCell = ({
         )}
       </td>
     );
-  };
+  }
+
+const enviarData = async (url, data) => {
+  const resp = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const json = await resp.json();
+  return json;
+}
 
 const  TableInfo = () => { 
     const [Class, setClass] = useState([])
@@ -128,7 +142,7 @@ const  TableInfo = () => {
         {
             title: 'CeCo',
             dataIndex: 'ceco',
-            width: '8%',
+            width: '10%',
             editable: true,
         },
         {
@@ -141,7 +155,7 @@ const  TableInfo = () => {
                 <Typography.Link
                 onClick={() => save(record.key)}
                 style={{
-                    marginInlineEnd: -100,
+                    marginInlineEnd: 8,
                   }}
                 >
                     <CheckIcon />
@@ -153,10 +167,21 @@ const  TableInfo = () => {
                 </Typography.Link>
             </span>
             ) : (
-            <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                <EditIcon />
-            </Typography.Link>
-            );
+            <>
+                <div className="flex justify-around">
+                    <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)} style={{
+                    marginInlineEnd: 8,
+                  }} >
+                      <EditIcon />
+                    </Typography.Link>
+                    <Popconfirm title="Are you sure to delete this language?" onConfirm={() => deletedStudent(record.id)} >
+                    <Typography.Link>
+                      <Trash  />
+                    </Typography.Link>
+                    </Popconfirm>
+                </div>
+                  </>
+            )
         },
         },
     ]
@@ -176,6 +201,27 @@ const  TableInfo = () => {
         }),
         };
     })
+
+    const deletedStudent = async (key) => {
+      const Deleted = {
+        "aksi": "deletedStudent",
+        "id": key,
+      }
+            // console.log(Deleted)
+      const respuesta = await enviarData(url, Deleted)
+      if(respuesta.error){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: respuesta.error,
+        })
+      }
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: respuesta.success,
+      })
+    }
 
     return <>
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 w-full">
