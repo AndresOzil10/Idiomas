@@ -4,6 +4,7 @@ import EditIcon from '../icons/edit';
 import CheckIcon from './checkIcon';
 import CloseIcon from '../icons/close';
 import Trash from '../icons/trash';
+import Swal from 'sweetalert2';
 
 const url_login = "http://localhost/API/idiomas/class.php"
 const url = "http://localhost/API/idiomas/functions.php"
@@ -154,9 +155,7 @@ const  TableInfo = () => {
             <span className='flex justify-around'>
                 <Typography.Link
                 onClick={() => save(record.key)}
-                style={{
-                    marginInlineEnd: 8,
-                  }}
+                
                 >
                     <CheckIcon />
                 </Typography.Link>
@@ -169,9 +168,7 @@ const  TableInfo = () => {
             ) : (
             <>
                 <div className="flex justify-around">
-                    <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)} style={{
-                    marginInlineEnd: 8,
-                  }} >
+                    <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)} >
                       <EditIcon />
                     </Typography.Link>
                     <Popconfirm title="Are you sure to delete this language?" onConfirm={() => deletedStudent(record.id)} >
