@@ -7,7 +7,7 @@ include 'conexion.php';
 $con = conectarDB();
 $con->set_charset('utf8');
 
-$sql = $con->query("SELECT c.id, l.laguage, g.level, g.schedule, g.days, c.nn, c.name, c.ceco FROM class c INNER JOIN laguage l ON c.id_language = l.id INNER JOIN groups g ON c.id_group = g.id");
+$sql = $con->query("SELECT c.id, l.laguage, g.level, g.schedule, g.days, c.nn, u.ApellidoP, u.ApellidoM, u.Nombre, ce.ceco FROM class c INNER JOIN laguage l ON c.id_language = l.id INNER JOIN groups g ON c.id_group = g.id INNER JOIN usuarios u ON c.nn = u.Nomina INNER JOIN costos ce ON c.ceco = ce.id ORDER BY c.id ASC");
 
 $res = array();
 while($row=$sql->fetch_assoc()){
@@ -15,7 +15,7 @@ while($row=$sql->fetch_assoc()){
         'id' => $row['id'],
         'language' => $row['laguage'],
         'nn' => $row['nn'],
-        'name' => $row['name'],
+        'name' => $row['ApellidoP']." ".$row['ApellidoM']." ".$row['Nombre'],
         'idioma'=> $row['laguage'],
         'group'=> $row['level']." ".$row['schedule']." ".$row['days'],
         'ceco'=> $row['ceco'],
