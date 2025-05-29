@@ -16,13 +16,8 @@ const enviarData = async (url, data) => {
 }
 
 const InfoTarjet = () => { 
-    const [ceco, setCeco] = useState([]);
 
-    useEffect(() => {
-        fetchData()
-    }, []);
-
-    const fetchData = async () => {
+  const fetchData = async () => {
         const DeletedUsers = {
               "aksi": "ChargeCeCo",
             }
@@ -33,6 +28,13 @@ const InfoTarjet = () => {
             console.error("Error fetching data:", respuesta.mensaje);
         }
     }
+    
+    const [ceco, setCeco] = useState([]);
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
+
     return (
         <div className="flex w-full flex-col">
            <List
