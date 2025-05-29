@@ -1,3 +1,4 @@
+import { Card, List } from "antd";
 import { useEffect, useState } from "react";
 
 const url = "http://localhost/API/idiomas/functions.php";
@@ -34,17 +35,32 @@ const InfoTarjet = () => {
     }
     return (
         <div className="flex w-full flex-col">
-            <div className="stats stats-vertical lg:stats-horizontal sdow">
-                {ceco.map((item, idx) => (
-                    <div className="stat" key={idx}>
-                        <div className="stat-title">{item.name || "CeCo"}</div>
-                        <div className="stat-value">
-                            {item.promedio ? `$${item.promedio}` : "-"}
-                        </div>
-                        <div className="stat-desc">{""}</div>
-                    </div>
-                ))}
-            </div>
+           <List
+            grid={{
+            gutter: 0,
+            xs: 0,
+            sm: 0,
+            md: 1,
+            lg: 1,
+            xl: 3,
+            xxl: 6,
+            }}
+            dataSource={ceco}
+            pagination={{
+                pageSize: 6,
+            }}
+            renderItem={item => (
+            <List.Item>
+                <Card
+                  className="text-center"
+                  title={item.name}
+                  style={{ backgroundColor: "#f36a71" }} // Cambia el color aquí
+                >
+                  {`$${item.promedio}`}
+                </Card>
+            </List.Item>
+            )}
+            />
         </div>
     )
  }
