@@ -396,7 +396,7 @@ const GroupButton = ({ isOpen }) => {
                                     onClick={handleAddGroup} 
                                     disabled={isLoading}
                                   >
-                                        {isLoading ? <span className="loading loading-spinner"></span> : <SaveIcon />}
+                                        {isLoading ? <span className="loading loading-infinity text-secondary-content"></span> : <SaveIcon />}
                                     </button>
                                     <button className="btn bg-error" onClick={closeAdd}>
                                         <CloseIcon />

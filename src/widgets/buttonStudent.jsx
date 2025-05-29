@@ -147,7 +147,7 @@ const StudentButton = ({isOpen}) => {
                 </select>
                 <div className="modal-action ml-3">
                     <button className="btn bg-accent" onClick={Save} disabled={isLoading}>
-                        {isLoading ? <span className="loading loading-spinner"></span> : <SaveIcon />}
+                        {isLoading ? <span className="loading loading-infinity text-secondary-content"></span> : <SaveIcon />}
                     </button>
                     <button className="btn btn-secondary" onClick={closeStudents}><CloseIcon /></button>
                 </div>

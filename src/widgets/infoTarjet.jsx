@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const url = "http://localhost/API/idiomas/functions.php";
 
@@ -17,130 +17,36 @@ const enviarData = async (url, data) => {
 const InfoTarjet = () => { 
     const [ceco, setCeco] = useState([]);
 
+    useEffect(() => {
+        fetchData()
+    }, []);
+
     const fetchData = async () => {
         const DeletedUsers = {
               "aksi": "ChargeCeCo",
             }
         const respuesta = await enviarData(url, DeletedUsers)
+        if(respuesta.estado === true){
+            setCeco(respuesta.data);
+        } else {
+            console.error("Error fetching data:", respuesta.mensaje);
+        }
     }
-    return <>
+    return (
         <div className="flex w-full flex-col">
-            <div className="stats stats-vertical lg:stats-horizontal shadow">
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$31K</div>
-                    <div className="stat-desc">309495</div>
-                </div>
-
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">4,200</div>
-                    <div className="stat-desc">↗︎ 400 (22%)</div>
-                </div>
-
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$27K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-            </div>
-                <div className="divider"></div>
-                <div className="stats stats-vertical lg:stats-horizontal shadow">
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">31K</div>
-                    <div className="stat-desc">309495</div>
-                </div>
-
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">4,200</div>
-                    <div className="stat-desc">↗︎ 400 (22%)</div>
-                </div>
-
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-title">CeCo</div>
-                    <div className="stat-value">$25K</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
+            <div className="stats stats-vertical lg:stats-horizontal sdow">
+                {ceco.map((item, idx) => (
+                    <div className="stat" key={idx}>
+                        <div className="stat-title">{item.name || "CeCo"}</div>
+                        <div className="stat-value">
+                            {item.promedio ? `$${item.promedio}` : "-"}
+                        </div>
+                        <div className="stat-desc">{""}</div>
+                    </div>
+                ))}
             </div>
         </div>
-    </>
+    )
  }
 
  export default InfoTarjet

@@ -141,7 +141,7 @@ const AddButton = ({isOpen}) => {
                                     onClick={handleAddTeacherUser} 
                                     disabled={isLoading}
                                 >
-                                    {isLoading ? <span className="loading loading-spinner"></span> : <SaveIcon />}
+                                    {isLoading ? <span className="loading loading-infinity text-secondary-content"></span> : <SaveIcon />}
                                 </button>
                                 <button className="btn bg-secondary" onClick={closeAdd}>
                                     <CloseIcon />
