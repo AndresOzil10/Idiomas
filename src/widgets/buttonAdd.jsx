@@ -60,41 +60,59 @@ const AddButton = ({isOpen}) => {
         }
 
     const handleAddTeacherUser = async () => {
-        setIsLoading(true)
-        if(user === '' || newPassword === '' || newName === ''){
+        setIsLoading(true);
+        
+        if(user === '' || newPassword === '' || newName === '') {
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please fill all fields',
+            });
+            setIsLoading(false);
+            return;
+        }
+
+        const newTeacherUser = {
+            "aksi": "addTeacherUser",
+            "user": user,
+            "password": newPassword,
+            "name": newName,
+        }
+
+        try {
+            const respuesta = await enviarData(url_add, newTeacherUser);
+            
+            if(respuesta.error) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Please fill all fields',
+                text: respuesta.error,
             });
-            setIsLoading(false)
-            return
-        }
-        const newTeacherUser = {
-          "aksi": "addTeacherUser",
-          "user": user,
-          "password": newPassword,
-          "name": newName,
-        }
-    
-        const respuesta = await enviarData(url_add, newTeacherUser)
-        if(respuesta.error){
-          Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: respuesta.error,
-            });
-        }
-        Swal.fire({
+            setIsLoading(false);
+            return;
+            }
+
+            await Swal.fire({
             icon: 'success',
             title: 'Éxito',
             text: respuesta.success,
-        })
-        setNewName('')
-        setUser('')
-        setNewPassword('') 
-        setIsLoading(false)
-      }
+            });
+
+            // Limpiar campos después de que se cierre la alerta
+            setNewName('');
+            setUser('');
+            setNewPassword('');
+            
+        } catch (error) {
+            Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error inesperado',
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    }
     
     return <>
         <button className="btn btn-ghost rounded-full btn-error" onClick={showNewUser}>
@@ -118,6 +136,7 @@ const AddButton = ({isOpen}) => {
                                         type="text" 
                                         className="input" 
                                         placeholder="My awesome page" 
+                                        value={user}
                                         onChange={handleChangeUser} 
                                     />
                                 </fieldset>
@@ -126,13 +145,14 @@ const AddButton = ({isOpen}) => {
                             <div className="form-control mt-3">
                                 <fieldset className="fieldset">
                                     <legend className="fieldset-legend">Password:</legend>
-                                    <input type="text" className="input" placeholder="My awesome page" onChange={handleChangePassword} />
+                                    <input type="text" className="input" placeholder="My awesome page" 
+                                    value={newPassword} onChange={handleChangePassword} />
                                 </fieldset>
                             </div>
                             <div className="form-control mt-3">
                                 <fieldset className="fieldset">
                                     <legend className="fieldset-legend">Nombre:</legend>
-                                    <input type="text" className="input" placeholder="My awesome page" onChange={handleChangeName} />
+                                    <input type="text" className="input" placeholder="My awesome page" value={newName} onChange={handleChangeName} />
                                 </fieldset>
                             </div>
                             <div className="modal-action ml-3">

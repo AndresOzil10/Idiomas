@@ -28,7 +28,7 @@ const InfoTarjet = () => {
             console.error("Error fetching data:", respuesta.mensaje);
         }
     }
-    
+
     const [ceco, setCeco] = useState([]);
 
     useEffect(() => {
@@ -44,19 +44,19 @@ const InfoTarjet = () => {
             sm: 0,
             md: 1,
             lg: 1,
-            xl: 3,
-            xxl: 6,
+            xl: 1,
+            xxl: 10,
             }}
             dataSource={ceco}
             pagination={{
-                pageSize: 6,
+                pageSize: 10,
             }}
             renderItem={item => (
             <List.Item>
                 <Card
                   className="text-center"
                   title={item.name}
-                  style={{ backgroundColor: "#f36a71" }} // Cambia el color aquí
+                  style={{ backgroundColor: "#fd5862" }} //#a5aba4, #739fa8, #afd6ff, #86add3
                 >
                   {`$${item.promedio}`}
                 </Card>
