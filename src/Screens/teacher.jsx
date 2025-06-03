@@ -1,4 +1,10 @@
+import { useState } from "react"
+import logo from "../assets/images/kayser_logo.webp"
+import LogoutIcon from "../icons/logoutIcon"
+import UserIcon from "../icons/user"
+
 const TeacherScreen = () => { 
+
     return <>
             <div className="navbar bg-base-100 shadow-sm">
                 <div className="navbar-start">
@@ -6,10 +12,25 @@ const TeacherScreen = () => {
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
-                        <LanguageButton isOpen={isOpen} />
+                        {/* <LanguageButton isOpen={isOpen} />
                         <GroupButton isOpen={isOpen} />
                         <StudentButton isOpen={isOpen} />
-                        <AddButton isOpen={isOpen} />
+                        <AddButton isOpen={isOpen} /> */}
+                        <div className="drawer">
+  <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+  <div className="drawer-content">
+    {/* Page content here */}
+    <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Open drawer</label>
+  </div>
+  <div className="drawer-side">
+    <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+    <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+      {/* Sidebar content here */}
+      <li><a>Sidebar Item 1</a></li>
+      <li><a>Sidebar Item 2</a></li>
+    </ul>
+  </div>
+</div>
                         
                     </ul>
                 </div>
@@ -26,16 +47,10 @@ const TeacherScreen = () => {
                     </button>
                 </div>
             </div>
-            <div className={modalOpen ? "blur-lg" : ""}>
                 <div className="flex justify-center mt-14">
-                    <InfoTarjet />
+                    
+                    
                 </div>
-                <div className="flex justify-between mt-52">
-                    <TableInfo />
-                    <Graphycs />
-                    <BarGraphycs />
-                </div>
-            </div>
         </>
  }
 
