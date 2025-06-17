@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import logo from "../assets/images/kayser_logo.webp";
-import LogoutIcon from "../icons/logoutIcon";
-import UserIcon from "../icons/user";
+import { useEffect, useState } from "react"
+import logo from "../assets/images/kayser_logo.webp"
+import LogoutIcon from "../icons/logoutIcon"
+import UserIcon from "../icons/user"
+import SaveIcon from "../icons/saveIcon"
 
-const url = "http://localhost/API/idiomas/functions.php";
+const url = "http://localhost/API/idiomas/functions.php"
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {
@@ -24,18 +25,56 @@ const TeacherScreen = () => {
         const Deleted = {
             "aksi": "getGroups",
             "id_teacher": "169"
-        };
-        const respuesta = await enviarData(url, Deleted);
+        }
+        const respuesta = await enviarData(url, Deleted)
         if (respuesta.estado === true) {
-            setGroups(respuesta.data);
+            setGroups(respuesta.data)
         } else {
-            console.error("Error fetching groups:", respuesta.message);
+            console.error("Error fetching groups:", respuesta.message)
         }
     }
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        fetchData()
+    }, [])
+
+    // State to store checked members per group
+    const [checkedMembers, setCheckedMembers] = useState({})
+
+    // Handle checkbox change
+    const handleCheckboxChange = (groupIndex, memberIndex) => {
+        setCheckedMembers(prev => {
+            const groupChecked = prev[groupIndex] || {}
+            return {
+                ...prev,
+                [groupIndex]: {
+                    ...groupChecked,
+                    [memberIndex]: !groupChecked[memberIndex]
+                }
+            }
+        })
+    }
+
+    // Handle Save button click
+    const handleSave = async (groupIndex, groupLevel) => {
+        const checked = checkedMembers[groupIndex] || {};
+        const checkedMemberIndexes = Object.keys(checked).filter(idx => checked[idx])
+        
+        const checkedMembersList = checkedMemberIndexes.map(idx => groups[groupIndex].members[idx])
+        // console.log("Saving members for group:", groupLevel)
+        // console.log("Checked member objects:", checkedMembersList)
+        const Asistencia = {
+            "aksi": "Asistencia",
+            "info": checkedMembersList,
+            "grupo": groupLevel
+        }
+        const respuesta = await enviarData(url, Asistencia)
+        if (respuesta.estado === true) {
+            setGroups(respuesta.data)
+        } else {
+            console.error("Error fetching groups:", respuesta.message)
+        }
+    }
 
     return (
         <>
@@ -59,18 +98,24 @@ const TeacherScreen = () => {
             <div className="block justify-center mt-14">
                 <h1 className="text-2xl font-bold text-center mb-4">Teacher Groups</h1>
                 {groups.length > 0 ? (
-                    groups.map((group, index) => (
-                        <div className="collapse bg-secondary mb-5" key={index}>
+                    groups.map((group, groupIndex) => (
+                        <div className="collapse border-secondary border-2 mb-5" key={groupIndex}>
                             <input type="checkbox" />
-                            <div className="collapse-title font-semibold">{group.level + " " + group.schedule}</div>
+                            <div className="collapse-title font-semibold text-center">{group.level + " " + group.schedule}</div>
                             <div className="collapse-content text-sm">
                                 <div className="overflow-x-auto">
+                                    <button
+                                        className="btn btn-ghost btn-success ml-[92%]"
+                                        onClick={() => handleSave(groupIndex, group.level)}
+                                    >
+                                        <SaveIcon/>Save
+                                    </button>
                                     <table className="table">
                                         <thead>
                                             <tr>
                                                 <th>NN</th>
                                                 <th>Name</th>
-                                                <th></th>
+                                                <th>12/06/2025</th>
                                                 <th>Edit</th>
                                             </tr>
                                         </thead>
@@ -79,7 +124,7 @@ const TeacherScreen = () => {
                                                 <tr key={memberIndex}>
                                                     <td>
                                                         <div className="flex items-center gap-3">
-                                                            <div>
+                                                             <div>
                                                                 <div className="font-bold">{member.nn}</div>
                                                             </div>
                                                         </div>
@@ -90,8 +135,15 @@ const TeacherScreen = () => {
                                                     </td>
                                                     <td>
                                                         <input
-                                                        type="checkbox"
-                                                        className="checkbox border-indigo-600 bg-indigo-500 checked:border-orange-500 checked:bg-orange-400 checked:text-orange-800"
+                                                            type="checkbox"
+                                                            className="checkbox border-error-content bg-error-content checked:border-success-content checked:bg-success-content checked:text-base-100"
+                                                            checked={
+                                                                !!(
+                                                                    checkedMembers[groupIndex] &&
+                                                                    checkedMembers[groupIndex][memberIndex]
+                                                                )
+                                                            }
+                                                            onChange={() => handleCheckboxChange(groupIndex, memberIndex)}
                                                         />
                                                     </td>
                                                     <th>
@@ -104,7 +156,7 @@ const TeacherScreen = () => {
                                             <tr>
                                                 <th>NN</th>
                                                 <th>Name</th>
-                                                <th></th>
+                                                <th>12/06/2025</th>
                                                 <th>Edit</th>
                                             </tr>
                                         </tfoot>
@@ -118,7 +170,7 @@ const TeacherScreen = () => {
                 )}
             </div>
         </>
-    );
+    )
 }
 
-export default TeacherScreen;
+export default TeacherScreen
