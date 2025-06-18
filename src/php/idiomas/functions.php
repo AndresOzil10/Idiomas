@@ -110,13 +110,104 @@ $aksi = $dataObject->aksi;
             echo json_encode(['respuesta' => false, 'error' => 'Error adding user: ']);
         }
     } elseif($aksi == "ChargeCeCo"){ 
-        $query = "SELECT ceco FROM costos";
+        $semana = date('W');
+        $query = "SELECT id, ceco FROM costos";
         $result = $con->query($query);
         while($row = $result->fetch_assoc()){
-            $ceco = $row['ceco'];
-            $query2 = "SELECT COUNT(*) as count FROM class WHERE CeCo = '$ceco'";
+            $ceco = $row['id'];
+            $name = $row['ceco'];
+            $suma = 0;
+            $query2 = "SELECT id_language, id_group FROM class WHERE ceco = '$ceco'";
+            $result2 = $con->query($query2);
+            while($row2 = $result2->fetch_assoc()){
+                $id_language = $row2['id_language'];
+                $id_group = $row2['id_group'];
+                $query3 = "SELECT COUNT(*) as count FROM class WHERE id_group = '$id_group'";
+                $result3 = $con->query($query3);
+                $row3 = $result3->fetch_assoc();
+                $count = $row3['count'];
+                $query4 = "SELECT costxclass FROM laguage WHERE id = '$id_language'";
+                $result4 = $con->query($query4);
+                $row4 = $result4->fetch_assoc();
+                $costxclass = $row4['costxclass'];
+                $suma = $suma + ($costxclass * 2)/ $count;
+            }
+            $promedio = $suma * $semana;
+            $numFormated = number_format($promedio, 2);
+            $resultados[] = [
+                'name' => $name,
+                'promedio' => $numFormated
+            ];
         }
 
+        echo json_encode(['estado' => true, 'data' => $resultados]);
+
+    } elseif($aksi == "getGroups"){
+        $data = [];
+        $id_teacher = $dataObject->id_teacher;
+        $query = "SELECT * FROM groups WHERE id_teacher = '$id_teacher'";
+        $result = $con->query($query);
+        while($row = $result->fetch_assoc()){
+            $id = $row['id'];
+            $level = $row['level'];
+            $schedule = $row['schedule'];
+            $group = [
+                'id' => $id,
+                'level' => $level,
+                'schedule' => $schedule,
+                'members' => []
+            ];
+
+            $query1 = "SELECT nn, name FROM class WHERE id_group = '$id'";
+            $result1 = $con->query($query1);
+            while($row1 = $result1->fetch_assoc()){
+                $group['members'][] = [
+                    'nn' => $row1['nn'],
+                    'name' => $row1['name']
+                ];
+            }
+
+            $data[] = $group;
+        }
+        echo json_encode(['estado' => true, 'data' => $data]);
+    } elseif($aksi == "Asistencia"){
+        $data = $dataObject->info;
+        $group = $dataObject->grupo;
+        $request = "SELECT id FROM groups WHERE level = '$group'";
+        $result = $con->query($request);
+        $row = $result->fetch_assoc();
+        $id_group = $row['id'];
+
+        echo $id_group."\n";
+
+        foreach($data as $obj) { 
+            $nn = $obj-> nn ?? null;
+            $name = $obj->name ?? null;
+
+            // $query = "UPDATE class SET asistencia = 1 WHERE nn = '$nn' AND id_group = '$id_group'";
+        }  
+        echo json_encode(['estado' => true, 'success' => 'Attendance recorded successfully.']);
+    } elseif($aksi == "login"){
+        $user = $dataObject->username;
+        $password = $dataObject->password;
+
+        $query = "SELECT contra FROM usuario WHERE user = '$user'";
+        $result = $con->query($query);
+        if($result->num_rows > 0){
+            $row = $result->fetch_assoc();
+            $hashedPassword = $row['contra'];
+
+            if(password_verify($password, $hashedPassword)){
+                $query = "SELECT id, user, email, languageexpense FROM usuario WHERE user = '$user'";
+                $result = $con->query($query);
+                $userData = $result->fetch_assoc();
+                echo json_encode(['estado' => true, 'data' => 'Usuario autenticado correctamente.']);
+            } else {
+                echo json_encode(['estado' => false, 'error' => 'Invalid password.']);
+            }
+        } else {
+            echo json_encode(['estado' => false, 'error' => 'User not found.']);
+        }
     }
 
 
