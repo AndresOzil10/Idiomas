@@ -56,7 +56,7 @@ const InfoTarjet = () => {
                 <Card
                   className="text-center"
                   title={item.name}
-                  style={{ backgroundColor: "#c1b3f7" }} //#a5aba4, #739fa8, #afd6ff, #86add3
+                  style={{ backgroundColor: "#94c5a5" }} //#a5aba4, #739fa8, #afd6ff, #86add3
                 >
                   {`$${item.promedio}`}
                 </Card>

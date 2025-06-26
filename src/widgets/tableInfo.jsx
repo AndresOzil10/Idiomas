@@ -87,25 +87,45 @@ const  TableInfo = () => {
     }
 
     const save = async (key) => {
+        console.log(key)
         try {
-        const row = await form.validateFields();
-        const newData = [...data];
-        const index = newData.findIndex((item) => key === item.key);
-        if (index > -1) {
-            const item = newData[index];
-            newData.splice(index, 1, {
-            ...item,
-            ...row,
-            });
-            setClass(newData);
-            setEditingKey('');
-        } else {
-            newData.push(row);
-            setClass(newData);
-            setEditingKey('');
-        }
+            const row = await form.validateFields();
+            const newData = [...Class];
+            const index = newData.findIndex((item) => key === item.key);
+            if (index > -1) {
+                const item = newData[index];
+                newData.splice(index, 1, { ...item, ...row });
+                setClass(newData);
+                setEditingKey('');
+                const data = {
+                    aksi: "updateStudent",
+                    id: item.id,
+                    name: row.name,
+                    idioma: row.idioma,
+                    group: row.group,
+                    ceco: row.ceco
+                }
+                console.log(data)
+                // const respuesta = await enviarData(url, data)
+                // if(respuesta.error){
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: respuesta.error,
+                //     })
+                // }
+                // Swal.fire({
+                //     icon: 'success',
+                //     title: 'Éxito',
+                //     text: respuesta.success,
+                // })
+            } else {
+                newData.push(row);
+                setClass(newData);
+                setEditingKey('');
+            }
         } catch (errInfo) {
-        console.log('Validate Failed:', errInfo);
+            console.log('Validate Failed:', errInfo);
         }
     }
 
