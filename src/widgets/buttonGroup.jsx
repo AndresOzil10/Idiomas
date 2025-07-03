@@ -10,8 +10,6 @@ import Trash from "../icons/trash"
 import { Form, Popconfirm, Table, Typography, Input, InputNumber } from "antd"
 import CheckIcon from "./checkIcon"
 
-const url_language = "http://localhost/API/idiomas/idioma.php"
-const url_login = "http://localhost/API/idiomas/groups.php"
 const url_add = "http://localhost/API/idiomas/functions.php"
 
 const enviarData = async (url, data) => {
@@ -65,29 +63,37 @@ const EditableCell = ({
 const GroupButton = ({ isOpen }) => {
     const [isGroup, setIsGroup] = useState(false)
     const [isAdd, setIsAdd] = useState(false)
-    const [isLanguage, setIsLanguage] = useState(false)
-    const [group, setGroup] = useState([])
+    const [isLanguage, setIsLanguage] = useState("")
+    const [group, setGroup] = useState("")
     const [form] = Form.useForm()
     const [isLoading, setIsLoading] = useState(false)
     
     const setData = async () => {
-        const response = await fetch(url_language)
-        const data = await response.json()
-        const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }))
-        setIsLanguage(dataWithKeys)
+      const Language = {
+            "aksi": "getLanguages"
+        }
+        const response = await enviarData(url_add, Language)
+        // console.log(response.data)
+        const data = await response.data
+        setIsLanguage(data)
+        // console.log(data)
+        // console.log(setIsLanguage)
     }
 
     const fetchData = async () => {
-        const response = await fetch(url_login)
-        const data = await response.json()
-        const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }))
-        setGroup(dataWithKeys)
+      const Groups = {
+            "aksi": "getGroupsList"
+      }
+        const response = await enviarData(url_add, Groups)
+        const data = await response.data
+        setGroup(data)
+        // console.log(response.data)
     }
 
     useEffect(() => {
-        setData()
-        fetchData()
-    }, [setData, fetchData])
+      fetchData()
+      setData()
+    }, [fetchData])
 
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record) => record.key === editingKey;

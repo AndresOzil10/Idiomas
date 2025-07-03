@@ -5,7 +5,6 @@ import SaveIcon from "../icons/saveIcon"
 import Swal from "sweetalert2"
 
 const url_add = "http://localhost/API/idiomas/functions.php"
-const url_login = "http://localhost/API/idiomas/"
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {
@@ -34,20 +33,30 @@ const StudentButton = ({isOpen}) => {
     
 
     const setStudent = async () => {
-        const response = await fetch(url_login+"students.php")
-        const data = await response.json()
+        const Students = {
+            "aksi": "getStudents"
+        }
+        const response = await enviarData(url_add, Students)
+        // console.log(response.data)
+        const data = await response.data
         setName(data)
     }
 
     const setLang = async () => {
-        const response = await fetch(url_login+"idioma.php")
-        const data = await response.json()
+        const Idiomas = {
+            "aksi": "getLanguages"
+        }
+        const response = await enviarData(url_add, Idiomas)
+        const data = await response.data
         setLanguage(data)
     }
 
     const setGrupo = async () => {
-        const response = await fetch(url_login+"groups.php")
-        const data = await response.json()
+        const Groups = {
+            "aksi": "getGroupsList"
+        }
+        const response = await enviarData(url_add, Groups)
+        const data = await response.data
         setGroup(data)
     }
 

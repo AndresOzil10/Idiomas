@@ -26,8 +26,11 @@ const TableUsers = () => {
   const [form] = Form.useForm();
 
   const fetchData = async () => {
-    const response = await fetch(url_login);
-    const data = await response.json();
+    const Users = {
+            "aksi": "getTeachersUsers"
+    }
+    const response = await enviarData(url, Users);
+    const data = await response.data;
     const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }));
     setGroup(dataWithKeys);
   }

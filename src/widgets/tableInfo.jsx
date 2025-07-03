@@ -5,43 +5,10 @@ import CheckIcon from './checkIcon';
 import CloseIcon from '../icons/close';
 import Trash from '../icons/trash';
 import Swal from 'sweetalert2';
+import { Select } from 'antd';
 
-const url_login = "http://localhost/API/idiomas/class.php"
 const url = "http://localhost/API/idiomas/functions.php"
-const EditableCell = ({
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-            rules={[
-              {
-                required: true,
-                message: `Please Input ${title}!`,
-              },
-            ]}
-          >
-            {inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  }
+
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {
@@ -60,17 +27,98 @@ const  TableInfo = () => {
     const [form] = Form.useForm();
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record) => record.key === editingKey
+
     
     const fetchData = async () => {
-        const response = await fetch(url_login)
-        const data = await response.json()
+      const Clase = {
+            "aksi": "getClassList"
+        }
+        const response = await enviarData(url, Clase)
+        const data = await response.data
         const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }))
         setClass(dataWithKeys)
     }
 
+    const [options, setOptions] = useState([]);
+
+    const getLanguage = async () => {
+      const Language = {
+      "aksi": "getLanguages"
+      }
+      const response = await enviarData(url, Language)
+      const data = await response.data
+      const opts = data.map((item) => ({
+        label: item.language,
+        value: item.id
+      }));
+      setOptions(opts);
+    }
+
     useEffect(() => {
-        fetchData()
-    }, [fetchData])
+      fetchData();
+      getLanguage();
+      // eslint-disable-next-line
+    }, [fetchData]);
+
+    const EditableCell = ({
+      editing,
+      dataIndex,
+      title,
+      inputType,
+      record,
+      index,
+      children,
+      ...restProps
+    }) => {
+      let inputNode;
+      if (dataIndex === 'idioma') {
+      inputNode = (
+        <Select>
+        {options.map(opt => (
+          <Select.Option key={opt.value} value={opt.value}>
+          {opt.label}
+          </Select.Option>
+        ))}
+        </Select>
+      );
+      } else if (dataIndex === 'group') {
+      inputNode = (
+        <Select>
+        {groupOptions.map(opt => (
+          <Select.Option key={opt.value} value={opt.value}>
+          {opt.label}
+          </Select.Option>
+        ))}
+        </Select>
+      );
+      } else {
+      inputNode = inputType === 'number' ? <InputNumber /> : <Input />
+      }
+
+      return (
+      <td {...restProps}>
+        {editing ? (
+        <Form.Item
+          name={dataIndex}
+          style={{
+          margin: 0,
+          }}
+          rules={[
+          {
+            required: true,
+            message: `Please Input ${title}!`,
+          },
+          ]}
+        >
+          {inputNode}
+        </Form.Item>
+        ) : (
+        children
+        )}
+      </td>
+      )
+    }
+
     
     const edit = (record) => {
         form.setFieldsValue({
@@ -100,7 +148,6 @@ const  TableInfo = () => {
                 const data = {
                     aksi: "updateStudent",
                     id: item.id,
-                    name: row.name,
                     idioma: row.idioma,
                     group: row.group,
                     ceco: row.ceco
@@ -119,6 +166,7 @@ const  TableInfo = () => {
                 //     title: 'Éxito',
                 //     text: respuesta.success,
                 // })
+                // fetchData()
             } else {
                 newData.push(row);
                 setClass(newData);
@@ -262,4 +310,17 @@ const  TableInfo = () => {
     </>
  }
 
- export default TableInfo
+// Opciones para los selects
+
+
+const groupOptions = [
+  { label: 'A1', value: 'A1' },
+  { label: 'A2', value: 'A2' },
+  { label: 'B1', value: 'B1' },
+  { label: 'B2', value: 'B2' },
+  { label: 'C1', value: 'C1' },
+  { label: 'C2', value: 'C2' },
+  // Agrega más grupos si es necesario
+]
+
+export default TableInfo

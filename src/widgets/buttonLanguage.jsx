@@ -8,7 +8,6 @@ import CloseIcon from "../icons/close"
 import SaveIcon from "../icons/saveIcon"
 import Swal from "sweetalert2"
 
-const url_login = "http://localhost/API/idiomas/idioma.php"
 const url_add = "http://localhost/API/idiomas/functions.php"
 
 const enviarData = async (url, data) => {
@@ -67,10 +66,13 @@ const LanguageButton = ({ isOpen }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const setData = async () => {
-    const response = await fetch(url_login);
-    const data = await response.json();
-    const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }));
-    setLanguage(dataWithKeys);
+    const Languages = {
+            "aksi": "getLanguages"
+        }
+        const response = await enviarData(url_add, Languages)
+        // console.log(response.data)
+        const data = await response.data
+    setLanguage(data);
   }
 
 
