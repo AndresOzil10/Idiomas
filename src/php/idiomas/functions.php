@@ -208,7 +208,88 @@ $aksi = $dataObject->aksi;
         } else {
             echo json_encode(['estado' => false, 'error' => 'User not found.']);
         }
-    }
+    } elseif($aksi == "updateStudent"){
+        $id = $dataObject->id;
+        $language = $dataObject->language;
+        $grupo = $dataObject->grupo;
+        $ceco = $dataObject->ceco;
+
+        $query = "SELECT  FROM costos WHERE ceco = '$ceco'";
+
+
+        $query = "UPDATE class SET id_language = '$language', id_group = '$grupo', ceco = '$ceco' WHERE id = '$id'";
+        if($con->query($query)){
+            echo json_encode(['estado' => true, 'success' => 'Student updated successfully.']);
+        } else {
+            echo json_encode(['estado' => false, 'error' => 'Error updating student: ']);
+        }
+    } elseif($aksi == "getStudents"){
+        $sql = $con->query("SELECT Nomina, ApellidoP, ApellidoM, Nombre FROM usuarios ");
+        $res = array();
+        while($row=$sql->fetch_assoc()){
+            $res[] = array(
+                'nomina' => $row['Nomina'],
+                'nombre' => $row['ApellidoP']." ".$row['ApellidoM']." ".$row['Nombre'],
+            );
+        }
+        echo json_encode(['estado' => true, 'data' => $res]);
+    } elseif($aksi == "getLanguages"){
+        $query = "SELECT id, laguage, costxclass FROM laguage";
+        $result = $con->query($query);
+        $languages = [];
+        while($row = $result->fetch_assoc()){
+            $languages[] = [
+                'id' => $row['id'],
+                'language' => $row['laguage'],
+                'costxclass' => $row['costxclass']
+            ];
+        }
+        echo json_encode(['estado' => true, 'data' => $languages]);
+    } elseif($aksi == "getGroupsList"){
+        $sql = $con->query("SELECT groups.id, laguage, level, schedule, days FROM groups INNER JOIN laguage ON id_language = laguage.id");
+
+        $res = array();
+        while($row=$sql->fetch_assoc()){
+            $res[] = array(
+                'id' => $row['id'],
+                'language' => $row['laguage'],
+                'level' => $row['level'],
+                'schedule' => $row['schedule'],
+                'days' => $row['days']
+            );
+        }
+
+        echo json_encode(['estado' => true, 'data' => $res]);
+    } elseif($aksi == "getClassList"){
+        $sql = $con->query("SELECT c.id, l.laguage, g.level, g.schedule, g.days, c.nn, u.ApellidoP, u.ApellidoM, u.Nombre, ce.ceco FROM class c INNER JOIN laguage l ON c.id_language = l.id INNER JOIN groups g ON c.id_group = g.id INNER JOIN usuarios u ON c.nn = u.Nomina INNER JOIN costos ce ON c.ceco = ce.id ORDER BY c.id ASC");
+
+        $res = array();
+        while($row=$sql->fetch_assoc()){
+            $res[] = array(
+                'id' => $row['id'],
+                'language' => $row['laguage'],
+                'nn' => $row['nn'],
+                'name' => $row['ApellidoP']." ".$row['ApellidoM']." ".$row['Nombre'],
+                'idioma'=> $row['laguage'],
+                'group'=> $row['level']." ".$row['schedule']." ".$row['days'],
+                'ceco'=> $row['ceco'],
+            );
+        }
+
+        echo json_encode(['estado' => true, 'data' => $res]);
+    } elseif($aksi == "getTeachersUsers"){
+        $sql = $con->query("SELECT id, user, email FROM usuario WHERE languageexpense = 3");
+        $res = array();
+        while($row=$sql->fetch_assoc()){
+            $res[] = array(
+                'id' => $row['id'],
+                'user' => $row['user'],
+                'nombre' => $row['email']
+            );
+        }
+        echo json_encode(['estado' => true, 'data' => $res]);
+    } 
+    mysqli_close($con);
 
 
 ?>
