@@ -70,7 +70,7 @@ const  TableInfo = () => {
       children,
       ...restProps
     }) => {
-      let inputNode;
+      let inputNode
       if (dataIndex === 'idioma') {
       inputNode = (
         <Select>

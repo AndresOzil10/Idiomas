@@ -3,6 +3,7 @@ import LoginScreen from "../Screens/login";
 import NotFound from "../Screens/NotFound";
 import HomeScreen from "../Screens/home";
 import TeacherScreen from "../Screens/teacher";
+import ScreenHome from "../Screens/test";
 
 
 export const router = createBrowserRouter([
@@ -13,7 +14,7 @@ export const router = createBrowserRouter([
     },
     {
         path: '/home',
-        element: <HomeScreen />,
+        element: <ScreenHome />,
         errorElement: <NotFound />
     },
     {

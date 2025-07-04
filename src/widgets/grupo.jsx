@@ -60,8 +60,7 @@ const EditableCell = ({
   )
 }
 
-const GroupButton = ({ isOpen }) => {
-    const [isGroup, setIsGroup] = useState(false)
+const GroupTest = () => {
     const [isAdd, setIsAdd] = useState(false)
     const [isLanguage, setIsLanguage] = useState("")
     const [group, setGroup] = useState("")
@@ -256,12 +255,10 @@ const GroupButton = ({ isOpen }) => {
     })
 
     const showGroups = () => {
-        setIsGroup(true)
         isOpen(true)
     }
 
     const closeGroup = () => {
-        setIsGroup(false)
         isOpen(false)
     }
 
@@ -322,14 +319,7 @@ const GroupButton = ({ isOpen }) => {
 
     return (
         <>
-            <button className="btn btn-ghost rounded-full btn-error" onClick={showGroups}>
-                <Language />
-                <span>Level</span>
-            </button>
-            <dialog open={isGroup} className="modal">
-                <div className="modal-box w-11/12 max-w-7xl border border-base-content bg-base-100 shadow-lg shadow-primary"> {/* Increased max width */}
-                    
-                <div className="overflow-x-auto rounded-box shadow-lg">
+        <div className="overflow-x-auto rounded-box shadow-lg">
                     <Form form={form} component={false}>
                         <Table
                             components={{
@@ -414,11 +404,8 @@ const GroupButton = ({ isOpen }) => {
                             <CloseIcon />
                         </button>
                     </div>
-                </div>
-                
-            </dialog>
         </>
     )
-}
+ }
 
-export default GroupButton
+ export default GroupTest

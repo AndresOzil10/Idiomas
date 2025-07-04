@@ -33,16 +33,15 @@ const EditableCell = ({
   index,
   children,
   ...restProps
-  }) => {
+}) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+
   return (
     <td {...restProps}>
       {editing ? (
         <Form.Item
           name={dataIndex}
-          style={{
-            margin: 0,
-          }}
+          style={{ margin: 0 }}
           rules={[
             {
               required: true,
@@ -56,7 +55,9 @@ const EditableCell = ({
         children
       )}
     </td>
-)}
+  );
+};
+
 
 const LanguageButton = ({ isOpen }) => {
   const [isLanguage, setIsLanguage] = useState(false);
@@ -82,18 +83,13 @@ const LanguageButton = ({ isOpen }) => {
     }
   }, [isAdd]);
 
-  const [editingKey, setEditingKey] = useState('');
-  const isEditing = (record) => record.key === editingKey;
+  const [editingKey, setEditingKey] = useState('')
+  const isEditing = (record) => record.key === editingKey
 
   const edit = (record) => {
-    form.setFieldsValue({
-      id: '',
-      language: '',
-      costxhour: '',
-      ...record,
-    });
+    form.setFieldsValue({ name: '', age: '', address: '', ...record });
     setEditingKey(record.key);
-  }
+  };
 
   const cancel = () => {
     setEditingKey('');
@@ -151,7 +147,7 @@ const LanguageButton = ({ isOpen }) => {
       title: 'ID',
       dataIndex: 'id',
       width: '15%',
-      editable: true,
+      editable: false,
     },
     {
       title: 'Language',
@@ -209,7 +205,7 @@ const LanguageButton = ({ isOpen }) => {
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
-      return col;
+      return col
     }
     return {
       ...col,
@@ -350,7 +346,7 @@ const LanguageButton = ({ isOpen }) => {
         </div>
       </dialog>
     </>
-  );
-};
+  )
+}
 
 export default LanguageButton;
