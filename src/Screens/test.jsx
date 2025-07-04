@@ -5,6 +5,14 @@ import UserIcon from "../icons/user"
 import Language from "../icons/language"
 import LanguageS from "../widgets/language"
 import GroupTest from "../widgets/grupo"
+import StudentAdd from "../widgets/student"
+import UsersIcon from "../icons/users"
+import Add from "../icons/new"
+import UserScreen from "../widgets/user"
+import InfoTarjet from "../widgets/infoTarjet"
+import Graphycs from "../widgets/graphycs"
+import BarGraphycs from "../widgets/bargraphycs"
+import TableInfo from "../widgets/tableInfo"
 
 
 const ScreenHome = () => { 
@@ -67,7 +75,7 @@ const ScreenHome = () => {
                     </div>
 
                     <label className="tab">
-                        <input type="radio" name="my_tabs_4" defaultChecked />
+                        <input type="radio" name="my_tabs_4" />
                         <Language />
                         Groups
                     </label>
@@ -77,10 +85,33 @@ const ScreenHome = () => {
 
                     <label className="tab">
                         <input type="radio" name="my_tabs_4" />
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 me-2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                        Love
+                        <Add />
+                        Add Student
                     </label>
-                    <div className="tab-content bg-base-100 border-base-300 p-6">Tab content 3</div>
+                    <div className="tab-content bg-base-100 border-base-300 p-6">
+                        <StudentAdd />
+                    </div>
+
+                    <label className="tab">
+                        <input type="radio" name="my_tabs_4" />
+                        < UsersIcon/>
+                        Users
+                    </label>
+                    <div className="tab-content bg-base-100 border-base-300 p-6">
+                        <UserScreen />
+                    </div>
+                </div>
+                <div className="mb-10">
+                    <div className="flex justify-center mt-14">
+                        <InfoTarjet />
+                    </div>
+                    <div className="flex justify-between xl:justify-arround mt-14">
+                        <Graphycs />
+                        <BarGraphycs />
+                    </div>
+                    <div className="flex justify-center ml-30 mt-14 w-[90%] shadow-lg shadow-base-content">
+                        <TableInfo />
+                    </div>
                 </div>
             </div>
         </>
