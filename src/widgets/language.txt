@@ -22,6 +22,40 @@ const enviarData = async (url, data) => {
   return  json
 }
 
+
+const EditableCell = ({
+  editing,
+  dataIndex,
+  title,
+  inputType,
+  record,
+  index,
+  children,
+  ...restProps
+}) => {
+  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+
+  return (
+    <td {...restProps}>
+      {editing ? (
+        <Form.Item
+          name={dataIndex}
+          style={{ margin: 0 }}
+          rules={[
+            {
+              required: true,
+              message: `Please Input ${title}!`,
+            },
+          ]}
+        >
+          {inputNode}
+        </Form.Item>
+      ) : (
+        children
+      )}
+    </td>
+  )
+}
 const LanguageS = () => {
 
     const [isLanguage, setIsLanguage] = useState(false);
@@ -46,6 +80,17 @@ const LanguageS = () => {
         }
       }, [isAdd]);
     
+      const [editingKey, setEditingKey] = useState('')
+      const isEditing = (record) => record.key === editingKey
+    
+      const edit = (record) => {
+        form.setFieldsValue({ name: '', age: '', address: '', ...record });
+        setEditingKey(record.key);
+      }
+    
+      const cancel = () => {
+        setEditingKey('');
+      }
     
       const save = async (key) => {
         try {
@@ -93,6 +138,83 @@ const LanguageS = () => {
           })
         
       }
+    
+      const columns = [
+        {
+          title: 'ID',
+          dataIndex: 'id',
+          width: '15%',
+          editable: false,
+        },
+        {
+          title: 'Language',
+          dataIndex: 'language',
+          width: '15%',
+          editable: true,
+        },
+        {
+          title: 'Cost per Hour',
+          dataIndex: 'costxclass',
+          width: '15%',
+          editable: true,
+        },
+        {
+          title: 'Operation',
+          dataIndex: 'operation',
+          width: '5%',
+          render: (_, record) => {
+            const editable = isEditing(record);
+            return (
+              <span>
+                {editable ? (
+                  <>
+                    <Typography.Link
+                      onClick={() => save(record.key)}
+                      style={{
+                        marginInlineEnd: 8,
+                      }}
+                    >
+                      Save
+                    </Typography.Link>
+                    <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                      <a>Cancel</a>
+                    </Popconfirm>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex justify-around">
+                        <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+                        <EditIcon />
+                        </Typography.Link>
+                        <Popconfirm title="Are you sure to delete this language?" onConfirm={() => deleteLanguage(record.id)} >
+                        <Typography.Link>
+                            <Trash />
+                        </Typography.Link>
+                        </Popconfirm>
+                    </div>
+                  </>
+                )}
+              </span>
+            )
+          },
+        },
+      ]
+    
+      const mergedColumns = columns.map((col) => {
+        if (!col.editable) {
+          return col
+        }
+        return {
+          ...col,
+          onCell: (record) => ({
+            record,
+            inputType: col.dataIndex === 'costxhour' ? 'number' : 'text',
+            dataIndex: col.dataIndex,
+            title: col.title,
+            editing: isEditing(record),
+          }),
+        }
+      })
     
     //   const showLanguages = () => {
     //     setIsLanguage(true);
@@ -160,45 +282,22 @@ const LanguageS = () => {
       {/* <dialog open={isLanguage} className="modal"> */}
         {/* <div className="modal-box w-11/12 max-w-5xl border border-base-content bg-base-100 shadow-lg shadow-primary"> */}
           <div className="overflow-x-auto rounded-box shadow-lg">
-            <div className="overflow-x-auto">
-              <table className="table">
-                {/* head */}
-                <thead>
-                  <tr>
-                    <th>Id</th>
-                    <th>Language</th>
-                    <th>Cost x Class</th>
-                    <th>Options</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {language.map((item) => (
-                    <tr key={item.id}> 
-                      <td>{item.id}</td>
-                      <td>{item.language}</td>
-                      <td>{item.costxclass}</td>
-                      <td>
-                        <button className="btn btn-ghost btn-error">
-                            <Trash />
-                        </button>
-                        <button className="btn btn-ghost btn-primary" onClick={() => save(item.id)}>
-                          <SaveIcon />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                {/* foot */}
-                <tfoot>
-                  <tr>
-                    <th>Id</th>
-                    <th>Language</th>
-                    <th>Cost x Class</th>
-                    <th>Options</th>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+            <Form form={form} component={false}>
+              <Table
+                components={{
+                  body: {
+                    cell: EditableCell,
+                  },
+                }}
+                bordered
+                dataSource={language}
+                columns={mergedColumns}
+                rowClassName="editable-row"
+                pagination={{
+                  onChange: cancel,
+                }}
+              />
+            </Form>
           </div>
           <div className="modal-action ">
             <button className="btn bg-primary" onClick={showAdd}><Add /></button>
