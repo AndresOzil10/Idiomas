@@ -137,7 +137,7 @@ const GroupTest = () => {
     const saveChanges = async () => {
         // console.log(updateLanguage, updateCost)
         const updateLevelData = {
-          "aksi": "updateLanguage",
+          "aksi": "UpdateLevel",
           "id": selectedRow.id,
           "level": updatedLevel,
           "schedule": updatedSchedule,
