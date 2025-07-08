@@ -43,7 +43,7 @@ const LanguageS = () => {
   }
 
   useEffect(() => {
-    setData();
+    setData()
   }, [])
 
   const deleteLanguage = async (key) => {

@@ -91,11 +91,11 @@ const GroupTest = () => {
     }
 
     const showAdd = () => {
-        setIsAdd(true);
+        setIsAdd(true)
     }
 
     const closeAdd = () => {
-        setIsAdd(false);
+        setIsAdd(false)
     }
 
     const closeGroup = () => {
@@ -157,8 +157,9 @@ const GroupTest = () => {
             title: 'Éxito',
             text: respuesta.success,
           })
-          setData() // Actualiza la lista después de editar
-          setShowRowModal(false)// Cierra el modal
+          
+          setShowRowModal(false)
+          fetchData()
         }
       }
 
