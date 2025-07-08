@@ -35,6 +35,11 @@ const GroupTest = () => {
     const [from, setFrom] = useState("");
     const [days, setDays] = useState("");
     const [selectedRow, setSelectedRow] = useState(null)
+    const [selectedLanguage, setSelectedLanguage] = useState("")
+    const [updatedLevel, setUpdatedLevel] = useState("")
+    const [updatedSchedule, setUpdatedSchedule] = useState("")
+    const [updatedDays, setUpdatedDays] = useState("")
+    const [showRowModal, setShowRowModal] = useState(false)
     
     // Paginación
     const [currentPage, setCurrentPage] = useState(1);
@@ -129,6 +134,33 @@ const GroupTest = () => {
         setIsLoading(false)
     }
 
+    const saveChanges = async () => {
+        // console.log(updateLanguage, updateCost)
+        const updatedLanguageData = {
+          "aksi": "updateLanguage",
+          "id": selectedRow.id,
+          "language": updateLanguage,
+          "costxclass": updateCost,
+        }
+    
+        const respuesta = await enviarData(url_add, updatedLanguageData);
+        if (respuesta.error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: respuesta.error,
+          })
+        } else {
+          Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: respuesta.success,
+          })
+          setData() // Actualiza la lista después de editar
+          setShowRowModal(false)// Cierra el modal
+        }
+      }
+
     // Calcular los datos de la página actual
     const paginatedData = group.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
@@ -160,8 +192,13 @@ const GroupTest = () => {
                                             className="btn btn-ghost btn-primary"
                                             onClick={() => {
                                               setShowRowModal(true)
+                                              setSelectedRow(item)
+                                              setSelectedLanguage(item.language)// Establece el valor actual
+                                              setUpdatedLevel(item.level) // Establece el valor actual
+                                              setUpdatedSchedule(item.schedule)
+                                              setUpdatedDays(item.days) // Establece el valor actual
                                                 // Aquí puedes implementar la lógica para editar
-                                            }}
+                                            }} 
                                         >
                                             <EditIcon />
                                         </button>
@@ -250,6 +287,64 @@ const GroupTest = () => {
                     <CloseIcon />
                 </button>
             </div>
+            {/* Modal para editar el idioma */}
+            {showRowModal && selectedRow && (
+                <dialog open={showRowModal} className="modal">
+                <div className="modal-box">
+                    <h2 className="text-lg font-bold mb-4">Language Details</h2>
+                    <fieldset className="fieldset">
+                        <p><strong>Id:</strong> {selectedRow.id}</p>
+                    </fieldset>
+                    <fieldset className="fieldset">
+                        <p><strong>Language:</strong> {selectedRow.language}</p>
+                    </fieldset>
+                    <fieldset className="fieldset">
+                        <legend className="fieldset-legend">Level:</legend>
+                        <input
+                            type="text"
+                            className="input"
+                            placeholder="Level"
+                            value={updatedLevel}
+                            onChange={(e) => setUpdatedLevel(e.target.value)} // Actualiza el estado
+                        />
+                    </fieldset>
+                    <fieldset className="fieldset">
+                        <legend className="fieldset-legend">Schedule:</legend>
+                        <input
+                            type="text"
+                            className="input"
+                            placeholder="Schedule"
+                            value={updatedSchedule}
+                            onChange={(e) => setUpdatedSchedule(e.target.value)} // Actualiza el estado
+                        />
+                    </fieldset>
+                    <fieldset className="fieldset">
+                        <legend className="fieldset-legend">Days:</legend>
+                        <input
+                            type="text"
+                            className="input"
+                            placeholder="Days"
+                            value={updatedDays}
+                            onChange={(e) => setUpdatedDays(e.target.value)} // Actualiza el estado
+                        />
+                    </fieldset>
+                    <div className="modal-action">
+                    <button
+                        className="btn bg-success"
+                        onClick={saveChanges} // Llama a la función para guardar cambios
+                    >
+                        <SaveIcon />
+                    </button>
+                    <button
+                        className="btn bg-error"
+                        onClick={() => setShowRowModal(false)}
+                    >
+                        <CloseIcon />
+                    </button>
+                    </div>
+                </div>
+                </dialog>
+            )}
         </>
     );
 }
