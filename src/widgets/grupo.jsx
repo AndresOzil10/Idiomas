@@ -136,14 +136,15 @@ const GroupTest = () => {
 
     const saveChanges = async () => {
         // console.log(updateLanguage, updateCost)
-        const updatedLanguageData = {
+        const updateLevelData = {
           "aksi": "updateLanguage",
           "id": selectedRow.id,
-          "language": updateLanguage,
-          "costxclass": updateCost,
+          "level": updatedLevel,
+          "schedule": updatedSchedule,
+          "days": updatedDays,
         }
     
-        const respuesta = await enviarData(url_add, updatedLanguageData);
+        const respuesta = await enviarData(url_add, updateLevelData)
         if (respuesta.error) {
           Swal.fire({
             icon: 'error',
