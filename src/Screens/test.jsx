@@ -22,6 +22,14 @@ const ScreenHome = () => {
         setModalOpen(open)
     }   
 
+    const handleLogout = () => {
+        // Clear session data (if any)
+        sessionStorage.clear();
+        localStorage.clear();
+        // Redirect to login and prevent back navigation
+        window.location.replace("/Idiomas");
+    }
+
     //console.log(modalOpen);
 
         return <>
@@ -46,7 +54,7 @@ const ScreenHome = () => {
                         </div>
                     </div>
                     <span className="mr-4">mx-asanchez</span>
-                    <button className="btn btn-ghost btn-error rounded-full" >
+                    <button className="btn btn-ghost btn-error rounded-full" onClick={handleLogout}>
                         <LogoutIcon />
                         <span>Logout</span>
                     </button>
