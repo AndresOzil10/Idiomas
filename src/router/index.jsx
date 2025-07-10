@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
         errorElement: <NotFound />
     },
     {
-        path: '/home',
+        path: '/Home',
         element: <ScreenHome />,
         errorElement: <NotFound />
     },

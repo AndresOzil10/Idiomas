@@ -76,6 +76,14 @@ const TeacherScreen = () => {
         }
     }
 
+    const handleLogout = () => {
+        // Clear session data (if any)
+        sessionStorage.clear();
+        localStorage.clear();
+        // Redirect to login and prevent back navigation
+        window.location.replace("/Idiomas");
+    }
+
     return (
         <>
             <div className="navbar bg-base-100 shadow-sm">
@@ -89,7 +97,7 @@ const TeacherScreen = () => {
                         </div>
                     </div>
                     <span className="mr-4">mx-asanchez</span>
-                    <button className="btn btn-ghost btn-primary">
+                    <button className="btn btn-ghost btn-primary" onClick={handleLogout}>
                         <LogoutIcon />
                         <span>Logout</span>
                     </button>
