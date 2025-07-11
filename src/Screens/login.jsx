@@ -5,6 +5,7 @@ import user from "../assets/gif/user.gif"
 import FooterLogin from "../widgets/footer"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import Swal from "sweetalert2"
 
 const url = "http://localhost/API/idiomas/functions.php"
 
@@ -48,7 +49,11 @@ const LoginScreen = () => {
                 })
             }
         } else {
-            console.error("Login failed:", respuesta.error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: respuesta.error,
+            })
         }
         
     };
