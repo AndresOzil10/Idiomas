@@ -38,7 +38,8 @@ const LoginScreen = () => {
             if(respuesta.tipo == 3){
                 navigate('/Teacher', {
                     state: {
-                        username: respuesta.data,
+                        username: respuesta.username,
+                        id: respuesta.id,
                     }
                 })
             } else if (respuesta.tipo == 2) {
@@ -56,14 +57,14 @@ const LoginScreen = () => {
             })
         }
         
-    };
+    }
 
     return (
         <>
         <div className="h-[100vh] flex flex-col items-center bg-cover justify-center text-dark" style={{ backgroundImage: `url(${fondo})` }}>
             <div className="h-[350px] w-80 bg-white/20 border border-white/20 backdrop-blur-lg rounded-lg px-6 my-4 overflow-hidden">
                     <h2 className="text-3xl font-blod pb-6 text-center"><img src={logo} width="100%"/></h2>
-                    <form className="flex flex-col items-center" action="" onClick={handleSubmit}>
+                    <form className="flex flex-col items-center" action="" onSubmit={handleSubmit}>
                         <div className="w-full relative">
                             <label className="input validator">
                             <img src={user} alt="" width={20} height={20}/>

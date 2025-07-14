@@ -3,6 +3,7 @@ import logo from "../assets/images/kayser_logo.webp"
 import LogoutIcon from "../icons/logoutIcon"
 import UserIcon from "../icons/user"
 import SaveIcon from "../icons/saveIcon"
+import { useLocation } from "react-router-dom"
 
 const url = "http://localhost/API/idiomas/functions.php"
 
@@ -18,13 +19,16 @@ const enviarData = async (url, data) => {
   return json;
 }
 
-const TeacherScreen = () => { 
+const TeacherScreen = ({}) => { 
+    const location = useLocation()
+    const { username, id } = location.state || {}
     const [groups, setGroups] = useState([]);
+
 
     const fetchData = async () => {
         const Deleted = {
             "aksi": "getGroups",
-            "id_teacher": "169"
+            "id_teacher": id
         }
         const respuesta = await enviarData(url, Deleted)
         if (respuesta.estado === true) {
@@ -96,7 +100,7 @@ const TeacherScreen = () => {
                             <UserIcon />
                         </div>
                     </div>
-                    <span className="mr-4">mx-asanchez</span>
+                    <span className="mr-4">{username}</span>
                     <button className="btn btn-ghost btn-primary" onClick={handleLogout}>
                         <LogoutIcon />
                         <span>Logout</span>
