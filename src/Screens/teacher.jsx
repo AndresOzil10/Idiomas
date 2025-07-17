@@ -42,10 +42,8 @@ const TeacherScreen = ({}) => {
         fetchData()
     }, [])
 
-    // State to store checked members per group
     const [checkedMembers, setCheckedMembers] = useState({})
 
-    // Handle checkbox change
     const handleCheckboxChange = (groupIndex, memberIndex) => {
         setCheckedMembers(prev => {
             const groupChecked = prev[groupIndex] || {}
@@ -62,23 +60,29 @@ const TeacherScreen = ({}) => {
     // Handle Save button click
     const handleSave = async (groupIndex, groupLevel) => {
         const checked = checkedMembers[groupIndex] || {};
-        const checkedMemberIndexes = Object.keys(checked).filter(idx => checked[idx])
+        const checkedMemberIndexes = Object.keys(checked).filter(idx => checked[idx]);
         
-        const checkedMembersList = checkedMemberIndexes.map(idx => groups[groupIndex].members[idx])
-        // console.log("Saving members for group:", groupLevel)
-        // console.log("Checked member objects:", checkedMembersList)
+        const checkedMembersList = checkedMemberIndexes.map(idx => groups[groupIndex].members[idx]);
+        const uncheckedMembersList = groups[groupIndex].members.filter((_, memberIndex) => !checked[memberIndex]);
+
+        // Aquí puedes ver qué miembros están marcados y cuáles no
+        console.log("Checked members for group:", groupLevel, checkedMembersList);
+        console.log("Unchecked members for group:", groupLevel, uncheckedMembersList);
+
         const Asistencia = {
             "aksi": "Asistencia",
-            "info": checkedMembersList,
+            "checked": checkedMembersList,
+            "unchecked": uncheckedMembersList,
             "grupo": groupLevel
-        }
-        const respuesta = await enviarData(url, Asistencia)
+        };
+        const respuesta = await enviarData(url, Asistencia);
         if (respuesta.estado === true) {
-            setGroups(respuesta.data)
+            setGroups(respuesta.data);
         } else {
-            console.error("Error fetching groups:", respuesta.message)
+            console.error("Error fetching groups:", respuesta.message);
         }
     }
+
 
     const handleLogout = () => {
         // Clear session data (if any)
@@ -128,7 +132,6 @@ const TeacherScreen = ({}) => {
                                                 <th>NN</th>
                                                 <th>Name</th>
                                                 <th>12/06/2025</th>
-                                                <th>Edit</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -158,9 +161,6 @@ const TeacherScreen = ({}) => {
                                                             onChange={() => handleCheckboxChange(groupIndex, memberIndex)}
                                                         />
                                                     </td>
-                                                    <th>
-                                                        <button className="btn btn-ghost btn-xs">details</button>
-                                                    </th>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -169,7 +169,6 @@ const TeacherScreen = ({}) => {
                                                 <th>NN</th>
                                                 <th>Name</th>
                                                 <th>12/06/2025</th>
-                                                <th>Edit</th>
                                             </tr>
                                         </tfoot>
                                     </table>

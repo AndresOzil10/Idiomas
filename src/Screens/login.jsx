@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2"
 
-const url = "http://localhost/API/idiomas/functions.php"
+const url_login = "http://localhost/API/idiomas/functions.php"
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {
@@ -18,7 +18,7 @@ const enviarData = async (url, data) => {
     }
   });
   const json = await resp.json();
-  return json;
+  return json
 }
 
 const LoginScreen = () => { 
@@ -33,7 +33,7 @@ const LoginScreen = () => {
             username: username,
             password: password
         }
-        const respuesta = await enviarData(url, data)
+        const respuesta = await enviarData(url_login, data)
         if (respuesta.estado === true) {
             if(respuesta.tipo == 3){
                 navigate('/Teacher', {
@@ -45,7 +45,7 @@ const LoginScreen = () => {
             } else if (respuesta.tipo == 2) {
                 navigate('/Home', {
                     state: {
-                        username: respuesta.data,
+                        username: respuesta.username,
                     }
                 })
             }

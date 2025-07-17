@@ -13,10 +13,13 @@ import InfoTarjet from "../widgets/infoTarjet"
 import Graphycs from "../widgets/graphycs"
 import BarGraphycs from "../widgets/bargraphycs"
 import TableInfo from "../widgets/tableInfo"
+import { useLocation } from "react-router-dom"
 
 
 const ScreenHome = () => { 
     const [modalOpen, setModalOpen] = useState(false)
+    const location = useLocation()
+    const { username } = location.state || {}
 
     const isOpen = (open) => {
         setModalOpen(open)
@@ -53,7 +56,7 @@ const ScreenHome = () => {
                             <UserIcon />
                         </div>
                     </div>
-                    <span className="mr-4">mx-asanchez</span>
+                    <span className="mr-4">{username}</span>
                     <button className="btn btn-ghost btn-error rounded-full" onClick={handleLogout}>
                         <LogoutIcon />
                         <span>Logout</span>
