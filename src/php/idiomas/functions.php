@@ -171,7 +171,8 @@ $aksi = $dataObject->aksi;
         }
         echo json_encode(['estado' => true, 'data' => $data]);
     } elseif($aksi == "Asistencia"){
-        $data = $dataObject->info;
+        $data = $dataObject->checked;
+        $unchecked = $dataObject->unchecked;
         $group = $dataObject->grupo;
         $request = "SELECT id FROM groups WHERE level = '$group'";
         $result = $con->query($request);
@@ -180,12 +181,21 @@ $aksi = $dataObject->aksi;
 
         echo $id_group."\n";
 
+        //checked mebers
         foreach($data as $obj) { 
             $nn = $obj-> nn ?? null;
             $name = $obj->name ?? null;
+            $asistencia = "SELECT asistencia FROM class WHERE nn = '$nn' AND id_group = '$id_group'";
+            $result = $con->query($asistencia);
+            $asistenciaRow = $result->fetch_assoc();
+
 
             // $query = "UPDATE class SET asistencia = 1 WHERE nn = '$nn' AND id_group = '$id_group'";
+
+            echo $nn." ".$name."\n";
+            
         }  
+        // echo $unchecked;
         echo json_encode(['estado' => true, 'success' => 'Attendance recorded successfully.']);
     } elseif($aksi == "login"){
         $user = $dataObject->username;
@@ -198,16 +208,14 @@ $aksi = $dataObject->aksi;
             $hashedPassword = $row['contra'];
 
             if(password_verify($password, $hashedPassword)){
-                $query = "SELECT id, user, email, languageexpense FROM usuario WHERE user = '$user'";
+                $query = "SELECT id, languageexpense FROM usuario WHERE user = '$user'";
                 $result = $con->query($query);
                 $userData = $result->fetch_assoc();
-                echo json_encode(['estado' => true, 'data' => 'Usuario autenticado correctamente.']);
+                echo json_encode(['estado' => true, 'message' => 'Usuario autenticado correctamente.', 'tipo' => $userData['languageexpense'], 'id' => $userData['id'], 'username' => $user]);
             } else {
                 echo json_encode(['estado' => false, 'error' => 'Invalid password.']);
             }
-        } else {
-            echo json_encode(['estado' => false, 'error' => 'User not found.']);
-        }
+        } 
     } elseif($aksi == "updateStudent"){
         $id = $dataObject->id;
         $language = $dataObject->language;
@@ -288,7 +296,30 @@ $aksi = $dataObject->aksi;
             );
         }
         echo json_encode(['estado' => true, 'data' => $res]);
-    } 
+    } elseif($aksi == "updateLanguage"){
+        $id = $dataObject->id;
+        $language = $dataObject->language;
+        $costxclass = $dataObject->costxclass;
+
+        $query = "UPDATE laguage SET laguage = '$language', costxclass = '$costxclass' WHERE id = '$id'";
+        if($con->query($query)){
+            echo json_encode(['estado' => true, 'success' => 'Language updated successfully.']);
+        } else {
+            echo json_encode(['estado' => false, 'error' => 'Error updating language: ']);
+        }
+    } elseif($aksi == "UpdateLevel"){
+        $id = $dataObject->id;
+        $level = $dataObject->level;
+        $days = $dataObject->days;
+        $schedule = $dataObject->schedule;
+
+        $query = "UPDATE groups SET level = '$level', days = '$days', schedule = '$schedule' WHERE id = '$id'";
+        if($con->query($query)){
+            echo json_encode(['estado' => true, 'success' => 'Group updated successfully.']);
+        } else {
+            echo json_encode(['estado' => false, 'error' => 'Error updating group: ']);
+        }
+    }
     mysqli_close($con);
 
 

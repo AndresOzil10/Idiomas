@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-04-2025 a las 02:03:32
+-- Tiempo de generación: 23-07-2025 a las 00:01:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -39,10 +39,7 @@ CREATE TABLE `laguage` (
 
 INSERT INTO `laguage` (`id`, `laguage`, `costxclass`) VALUES
 (1, 'English', 301.72),
-(2, 'Germany', 320.00),
-(3, 'Test', 350.80),
-(5, 'Test2', 567.89),
-(6, 'Test3', 789.12);
+(2, 'Germany', 320.00);
 
 --
 -- Índices para tablas volcadas
@@ -62,7 +59,7 @@ ALTER TABLE `laguage`
 -- AUTO_INCREMENT de la tabla `laguage`
 --
 ALTER TABLE `laguage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
