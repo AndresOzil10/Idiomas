@@ -26,7 +26,8 @@ const enviarData = async (url, data) => {
 const GroupTest = () => {
     const [isAdd, setIsAdd] = useState(false);
     const [isLanguage, setIsLanguage] = useState([]);
-    const [group, setGroup] = useState([]);
+    const [group, setGroup] = useState([])
+    const [isTeacher, setIsTeacher] = useState([])
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [language, setLanguage] = useState("");
@@ -43,7 +44,7 @@ const GroupTest = () => {
     
     // Paginación
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10; // Número de registros por página
+    const pageSize = 10 // Número de registros por página
 
     const setData = async () => {
         const Language = {
@@ -63,9 +64,19 @@ const GroupTest = () => {
         setGroup(data)
     }
 
+    const getTeacher = async () => {
+        const Teacher = {
+            "aksi": "getTeachers"
+        }
+        const response = await enviarData(url_add, Teacher)
+        const data = await response.data
+        setIsTeacher(data)
+    }
+
     useEffect(() => {
         fetchData()
         setData()
+        getTeacher()
     }, [])
 
     const deleteLanguage = async (key) => {
@@ -164,7 +175,7 @@ const GroupTest = () => {
       }
 
     // Calcular los datos de la página actual
-    const paginatedData = group.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const paginatedData = group.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
     return (
         <>
@@ -178,6 +189,7 @@ const GroupTest = () => {
                                 <th>Level</th>
                                 <th>Schedule</th>
                                 <th>Days</th>
+                                <th>Teacher</th>
                                 <th>Options</th>
                             </tr>
                         </thead>
@@ -189,6 +201,7 @@ const GroupTest = () => {
                                     <td>{item.level}</td>
                                     <td>{item.schedule}</td>
                                     <td>{item.days}</td>
+                                    <td>{item.teacher}</td>
                                     <td>
                                         <button
                                             className="btn btn-ghost btn-primary"
@@ -271,6 +284,23 @@ const GroupTest = () => {
                             <label className="text-xs">To:</label>
                         </div>
                         <input type="time" className="input w-full" value={from} onChange={(e) => setFrom(e.target.value)} />
+                        <div className="form-control mt-3">
+                            <label>Teacher:</label>
+                        </div>
+                        <select
+                            className="select w-full"
+                            value={language}
+                            onChange={(e) => setLanguage(e.target.value)}
+                        >
+                            <option disabled={true} value="">
+                                Pick a teacher
+                            </option>
+                            {isTeacher && isTeacher.map((teach) => (
+                                <option key={teach.id} value={teach.id}>
+                                    {teach.nombre}
+                                </option>
+                            ))}
+                        </select>
                         <div className="modal-action ml-3">
                             <button
                                 className="btn bg-accent"

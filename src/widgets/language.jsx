@@ -127,22 +127,22 @@ const LanguageS = () => {
       "costxclass": updateCost,
     }
 
-    const respuesta = await enviarData(url_add, updatedLanguageData);
-    if (respuesta.error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: respuesta.error,
-      })
-    } else {
-      Swal.fire({
-        icon: 'success',
-        title: 'Éxito',
-        text: respuesta.success,
-      })
-      setData() // Actualiza la lista después de editar
-      setShowRowModal(false)// Cierra el modal
-    }
+    const respuesta = await enviarData(url_add, updatedLanguageData)
+      if (respuesta.error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: respuesta.error,
+        })
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: respuesta.success,
+        })
+        setData() // Actualiza la lista después de editar
+        setShowRowModal(false)// Cierra el modal
+      }
   }
 
   return (
