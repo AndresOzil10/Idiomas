@@ -4,6 +4,7 @@ import LogoutIcon from "../icons/logoutIcon"
 import UserIcon from "../icons/user"
 import SaveIcon from "../icons/saveIcon"
 import { useLocation } from "react-router-dom"
+import Swal from "sweetalert2"
 
 const url = "http://localhost/API/idiomas/functions.php"
 
@@ -76,10 +77,18 @@ const TeacherScreen = ({}) => {
             "grupo": groupLevel
         };
         const respuesta = await enviarData(url, Asistencia);
-        if (respuesta.estado === true) {
-            setGroups(respuesta.data);
+        if (respuesta.error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: respuesta.error,
+            })
         } else {
-            console.error("Error fetching groups:", respuesta.message);
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: respuesta.success,
+            })
         }
     }
 
