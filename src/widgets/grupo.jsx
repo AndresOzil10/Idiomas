@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Language from "../icons/language";
 import Add from "../icons/new";
 import SaveIcon from "../icons/saveIcon";
@@ -6,28 +6,31 @@ import CloseIcon from "../icons/close";
 import Swal from "sweetalert2";
 import EditIcon from "../icons/edit";
 import Trash from "../icons/trash";
-
 import { Form, Table, Pagination } from "antd";
 
 const url_add = "http://10.144.13.5/API/idiomas/functions.php";
 
 const enviarData = async (url, data) => {
-    const resp = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    const json = await resp.json();
-    return json;
+    try {
+        const resp = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return await resp.json();
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error;
+    }
 }
 
 const GroupTest = () => {
     const [isAdd, setIsAdd] = useState(false);
     const [isLanguage, setIsLanguage] = useState([]);
-    const [group, setGroup] = useState([])
-    const [isTeacher, setIsTeacher] = useState([])
+    const [group, setGroup] = useState([]);
+    const [isTeacher, setIsTeacher] = useState([]);
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [language, setLanguage] = useState("");
@@ -36,88 +39,55 @@ const GroupTest = () => {
     const [schedule, setSchedule] = useState("");
     const [from, setFrom] = useState("");
     const [days, setDays] = useState("");
-    const [selectedRow, setSelectedRow] = useState(null)
-    const [selectedLanguage, setSelectedLanguage] = useState("")
-    const [updatedLevel, setUpdatedLevel] = useState("")
-    const [updatedSchedule, setUpdatedSchedule] = useState("")
-    const [updatedDays, setUpdatedDays] = useState("")
-    const [showRowModal, setShowRowModal] = useState(false)
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [updatedLevel, setUpdatedLevel] = useState("");
+    const [updatedSchedule, setUpdatedSchedule] = useState("");
+    const [updatedDays, setUpdatedDays] = useState("");
+    const [showRowModal, setShowRowModal] = useState(false);
     
     // Paginación
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10 // Número de registros por página
+    const pageSize = 10; // Número de registros por página
 
-    const setData = async () => {
-        const Language = {
-            "aksi": "getLanguages"
-        };
-        const response = await enviarData(url_add, Language);
-        const data = await response.data;
-        setIsLanguage(data);
-    }
+    const fetchLanguages = useCallback(async () => {
+        const response = await enviarData(url_add, { "aksi": "getLanguages" });
+        setIsLanguage(response.data || []);
+    }, []);
 
-    const fetchData = async () => {
-            const Groups = {
-                "aksi": "getGroupsList"
-            }
-            const response = await enviarData(url_add, Groups)
-            const data = await response.data
-            setGroup(data)
-    }
+    const fetchGroups = useCallback(async () => {
+        const response = await enviarData(url_add, { "aksi": "getGroupsList" });
+        setGroup(response.data || []);
+    }, []);
 
-    const getTeacher = async () => {
-        const Teacher = {
-            "aksi": "getTeachers"
-        }
-        const response = await enviarData(url_add, Teacher)
-        const data = await response.data
-        setIsTeacher(data)
-    }
-
-    useEffect(() => {
-        fetchData()
-        setData()
-        getTeacher()
+    const fetchTeachers = useCallback(async () => {
+        const response = await enviarData(url_add, { "aksi": "getTeachers" });
+        setIsTeacher(response.data || []);
     }, [])
 
-    const deleteLanguage = async (key) => {
-        const Deleted = {
-            "aksi": "deletedGroup",
-            "id": key,
-        };
-        const respuesta = await enviarData(url_add, Deleted);
-        if (respuesta.error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: respuesta.error,
-            });
+    useEffect(() => {
+        fetchLanguages();
+        fetchGroups();
+        fetchTeachers();
+    }, [fetchLanguages, fetchGroups, fetchTeachers]);
+
+    const deleteGroup = async (key) => {
+        const response = await enviarData(url_add, { "aksi": "deletedGroup", "id": key });
+        if (response.error) {
+            Swal.fire({ icon: 'error', title: 'Oops...', text: response.error });
         } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: respuesta.success,
-            });
-            fetchData(); // Actualiza la lista después de eliminar
+            Swal.fire({ icon: 'success', title: 'Éxito', text: response.success });
+            fetchGroups(); // Actualiza la lista después de eliminar
         }
-    }
-
-    const showAdd = () => {
-        setIsAdd(true)
-    }
-
-    const closeAdd = () => {
-        setIsAdd(false)
-    }
-
-    const closeGroup = () => {
-        // Implementa la lógica para cerrar el grupo si es necesario
     }
 
     const handleAddGroup = async () => {
         setIsLoading(true)
-        // Validación de campos
-        // ...
+        if (!language || !level || !schedule || !from || !days) {
+            Swal.fire({ icon: 'warning', title: 'Campos incompletos', text: 'Por favor, completa todos los campos.' });
+            setIsLoading(false);
+            return;
+        }
+        
         const newGroupAdd = {
             "aksi": "addGroup",
             "language": language,
@@ -125,58 +95,50 @@ const GroupTest = () => {
             "schedule": schedule,
             "from": from,
             "days": days,
-        }
+            "teacher": teacher
+        };
 
-        const respuesta = await enviarData(url_add, newGroupAdd);
-        if (respuesta.error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: respuesta.error,
-            })
+        const response = await enviarData(url_add, newGroupAdd);
+        if (response.error) {
+            Swal.fire({ icon: 'error', title: 'Oops...', text: response.error });
         } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: respuesta.success,
-            })
-            fetchData() // Actualiza la lista después de agregar
+            Swal.fire({ icon: 'success', title: 'Éxito', text: response.success });
+            fetchGroups(); // Actualiza la lista después de agregar
+            resetForm();
         }
-        // Reiniciar campos
-        setIsLoading(false)
+        setIsLoading(false);
+    }
+
+    const resetForm = () => {
+        setLanguage("");
+        setLevel("");
+        setSchedule("");
+        setFrom("");
+        setDays("");
+        setTeacher("");
     }
 
     const saveChanges = async () => {
-        // console.log(updateLanguage, updateCost)
         const updateLevelData = {
-          "aksi": "UpdateLevel",
-          "id": selectedRow.id,
-          "level": updatedLevel,
-          "schedule": updatedSchedule,
-          "days": updatedDays,
-        }
-    
-        const respuesta = await enviarData(url_add, updateLevelData)
-        if (respuesta.error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: respuesta.error,
-          })
+            "aksi": "UpdateLevel",
+            "id": selectedRow.id,
+            "level": updatedLevel,
+            "schedule": updatedSchedule,
+            "days": updatedDays,
+        };
+
+        const response = await enviarData(url_add, updateLevelData);
+        if (response.error) {
+            Swal.fire({ icon: 'error', title: 'Oops...', text: response.error });
         } else {
-          Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: respuesta.success,
-          })
-          
-          setShowRowModal(false)
-          fetchData()
+            Swal.fire({ icon: 'success', title: 'Éxito', text: response.success });
+            setShowRowModal(false);
+            fetchGroups();
         }
-      }
+    }
 
     // Calcular los datos de la página actual
-    const paginatedData = group.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    const paginatedData = group.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     return (
         <>
@@ -207,18 +169,16 @@ const GroupTest = () => {
                                         <button
                                             className="btn btn-ghost btn-primary"
                                             onClick={() => {
-                                              setShowRowModal(true)
-                                              setSelectedRow(item)
-                                              setSelectedLanguage(item.language)// Establece el valor actual
-                                              setUpdatedLevel(item.level) // Establece el valor actual
-                                              setUpdatedSchedule(item.schedule)
-                                              setUpdatedDays(item.days) // Establece el valor actual
-                                                // Aquí puedes implementar la lógica para editar
+                                                setShowRowModal(true);
+                                                setSelectedRow(item);
+                                                setUpdatedLevel(item.level);
+                                                setUpdatedSchedule(item.schedule);
+                                                setUpdatedDays(item.days);
                                             }} 
                                         >
                                             <EditIcon />
                                         </button>
-                                        <button className="btn btn-ghost btn-error" onClick={() => deleteLanguage(item.id)}>
+                                        <button className="btn btn-ghost btn-error" onClick={() => deleteGroup(item.id)}>
                                             <Trash />
                                         </button>
                                     </td>
@@ -237,7 +197,7 @@ const GroupTest = () => {
                 style={{ marginTop: '16px', textAlign: 'right' }}
             />
             <div className="modal-action">
-                <button className="btn btn-primary" onClick={showAdd}>
+                <button className="btn btn-primary" onClick={() => setIsAdd(true)}>
                     <Add />
                 </button>
                 <dialog open={isAdd} className="modal">
@@ -254,7 +214,7 @@ const GroupTest = () => {
                             <option disabled={true} value="">
                                 Pick a language
                             </option>
-                            {isLanguage && isLanguage.map((lang) => (
+                            {isLanguage.map((lang) => (
                                 <option key={lang.id} value={lang.id}>
                                     {lang.language}
                                 </option>
@@ -296,7 +256,7 @@ const GroupTest = () => {
                             <option disabled={true} value="">
                                 Pick a teacher
                             </option>
-                            {isTeacher && isTeacher.map((teach) => (
+                            {isTeacher.map((teach) => (
                                 <option key={teach.id} value={teach.id}>
                                     {teach.nombre}
                                 </option>
@@ -310,72 +270,72 @@ const GroupTest = () => {
                             >
                                 {isLoading ? <span className="loading loading-infinity text-secondary-content"></span> : <SaveIcon />}
                             </button>
-                            <button className="btn bg-error" onClick={closeAdd}>
+                            <button className="btn bg-error" onClick={() => setIsAdd(false)}>
                                 <CloseIcon />
                             </button>
                         </div>
                     </div>
                 </dialog>
-                <button className="btn btn-error" onClick={closeGroup}>
+                <button className="btn btn-error" onClick={() => setShowRowModal(false)}>
                     <CloseIcon />
                 </button>
             </div>
             {/* Modal para editar el idioma */}
             {showRowModal && selectedRow && (
                 <dialog open={showRowModal} className="modal">
-                <div className="modal-box">
-                    <h2 className="text-lg font-bold mb-4">Language Details</h2>
-                    <fieldset className="fieldset">
-                        <p><strong>Id:</strong> {selectedRow.id}</p>
-                    </fieldset>
-                    <fieldset className="fieldset">
-                        <p><strong>Language:</strong> {selectedRow.language}</p>
-                    </fieldset>
-                    <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Level:</legend>
-                        <input
-                            type="text"
-                            className="input"
-                            placeholder="Level"
-                            value={updatedLevel}
-                            onChange={(e) => setUpdatedLevel(e.target.value)} // Actualiza el estado
-                        />
-                    </fieldset>
-                    <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Schedule:</legend>
-                        <input
-                            type="text"
-                            className="input"
-                            placeholder="Schedule"
-                            value={updatedSchedule}
-                            onChange={(e) => setUpdatedSchedule(e.target.value)} // Actualiza el estado
-                        />
-                    </fieldset>
-                    <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Days:</legend>
-                        <input
-                            type="text"
-                            className="input"
-                            placeholder="Days"
-                            value={updatedDays}
-                            onChange={(e) => setUpdatedDays(e.target.value)} // Actualiza el estado
-                        />
-                    </fieldset>
-                    <div className="modal-action">
-                    <button
-                        className="btn bg-success"
-                        onClick={saveChanges} // Llama a la función para guardar cambios
-                    >
-                        <SaveIcon />
-                    </button>
-                    <button
-                        className="btn bg-error"
-                        onClick={() => setShowRowModal(false)}
-                    >
-                        <CloseIcon />
-                    </button>
+                    <div className="modal-box">
+                        <h2 className="text-lg font-bold mb-4">Language Details</h2>
+                        <fieldset className="fieldset">
+                            <p><strong>Id:</strong> {selectedRow.id}</p>
+                        </fieldset>
+                        <fieldset className="fieldset">
+                            <p><strong>Language:</strong> {selectedRow.language}</p>
+                        </fieldset>
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend">Level:</legend>
+                            <input
+                                type="text"
+                                className="input"
+                                placeholder="Level"
+                                value={updatedLevel}
+                                onChange={(e) => setUpdatedLevel(e.target.value)} // Actualiza el estado
+                            />
+                        </fieldset>
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend">Schedule:</legend>
+                            <input
+                                type="text"
+                                className="input"
+                                placeholder="Schedule"
+                                value={updatedSchedule}
+                                onChange={(e) => setUpdatedSchedule(e.target.value)} // Actualiza el estado
+                            />
+                        </fieldset>
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend">Days:</legend>
+                            <input
+                                type="text"
+                                className="input"
+                                placeholder="Days"
+                                value={updatedDays}
+                                onChange={(e) => setUpdatedDays(e.target.value)} // Actualiza el estado
+                            />
+                        </fieldset>
+                        <div className="modal-action">
+                            <button
+                                className="btn bg-success"
+                                onClick={saveChanges} // Llama a la función para guardar cambios
+                            >
+                                <SaveIcon />
+                            </button>
+                            <button
+                                className="btn bg-error"
+                                onClick={() => setShowRowModal(false)}
+                            >
+                                <CloseIcon />
+                            </button>
+                        </div>
                     </div>
-                </div>
                 </dialog>
             )}
         </>

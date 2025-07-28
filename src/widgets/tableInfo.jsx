@@ -1,55 +1,67 @@
-import React, { useEffect, useState } from 'react'
-import Trash from '../icons/trash'
-import Swal from 'sweetalert2'
+import React, { useEffect, useState, useCallback } from 'react';
+import Trash from '../icons/trash';
+import Swal from 'sweetalert2';
 
-const url = "http://10.144.13.5/API/idiomas/functions.php"
+const url = "http://10.144.13.5/API/idiomas/functions.php";
 
 const enviarData = async (url, data) => {
-  const resp = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  return await resp.json()
+  try {
+    const resp = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    return await resp.json();
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    throw error;
+  }
 }
 
 const TableInfo = () => {
-  const [Class, setClass] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 10
+  const [classData, setClassData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
-  const fetchData = async () => {
-    const Clase = { aksi: "getClassList" }
-    const response = await enviarData(url, Clase)
-    const data = response.data || []
-    const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }))
-    setClass(dataWithKeys)
-  }
+  const fetchData = useCallback(async () => {
+    const Clase = { aksi: "getClassList" };
+    try {
+      const response = await enviarData(url, Clase);
+      const data = response.data || [];
+      const dataWithKeys = data.map((item, index) => ({ ...item, key: index.toString() }));
+      setClassData(dataWithKeys);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, []);
 
   useEffect(() => {
-    fetchData()
-    // eslint-disable-next-line
-  }, [])
+    fetchData();
+  }, [fetchData]);
 
-  const deletedStudent = async (key) => {
-    const Deleted = { aksi: "deletedStudent", id: key };
-    const respuesta = await enviarData(url, Deleted);
-    if (respuesta.error) {
-      Swal.fire({ icon: 'error', title: 'Oops...', text: respuesta.error });
-    } else {
-      Swal.fire({ icon: 'success', title: 'Éxito', text: respuesta.success });
-      fetchData();
+  const deletedStudent = async (id) => {
+    const Deleted = { aksi: "deletedStudent", id };
+    try {
+      const respuesta = await enviarData(url, Deleted);
+      if (respuesta.error) {
+        Swal.fire({ icon: 'error', title: 'Oops...', text: respuesta.error });
+      } else {
+        Swal.fire({ icon: 'success', title: 'Éxito', text: respuesta.success });
+        fetchData();
+      }
+    } catch (error) {
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Ocurrió un error inesperado' });
     }
   }
 
   // Pagination logic
-  const totalPages = Math.ceil(Class.length / pageSize)
-  const paginatedData = Class.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  const totalPages = Math.ceil(classData.length / pageSize);
+  const paginatedData = classData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handlePageChange = (page) => {
-    setCurrentPage(page)
+    setCurrentPage(page);
   }
 
   return (
@@ -116,4 +128,4 @@ const TableInfo = () => {
   );
 };
 
-export default TableInfo;
+export default TableInfo
