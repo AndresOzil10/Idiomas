@@ -31,6 +31,7 @@ const GroupTest = () => {
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [language, setLanguage] = useState("");
+    const [teacher, setTeacher] = useState("");
     const [level, setLevel] = useState("");
     const [schedule, setSchedule] = useState("");
     const [from, setFrom] = useState("");
@@ -56,12 +57,12 @@ const GroupTest = () => {
     }
 
     const fetchData = async () => {
-        const Groups = {
-            "aksi": "getGroupsList"
-        }
-        const response = await enviarData(url_add, Groups)
-        const data = await response.data
-        setGroup(data)
+            const Groups = {
+                "aksi": "getGroupsList"
+            }
+            const response = await enviarData(url_add, Groups)
+            const data = await response.data
+            setGroup(data)
     }
 
     const getTeacher = async () => {
@@ -289,8 +290,8 @@ const GroupTest = () => {
                         </div>
                         <select
                             className="select w-full"
-                            value={language}
-                            onChange={(e) => setLanguage(e.target.value)}
+                            value={teacher}
+                            onChange={(e) => setTeacher(e.target.value)}
                         >
                             <option disabled={true} value="">
                                 Pick a teacher
