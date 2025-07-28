@@ -6,7 +6,7 @@ import SaveIcon from "../icons/saveIcon"
 import TableUsers from "./tableUsers"
 import Swal from "sweetalert2"
 
-const url_add = "http://localhost/API/idiomas/functions.php"
+const url_add = "http://10.144.13.5/API/idiomas/functions.php"
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {

@@ -7,7 +7,7 @@ import CloseIcon from "../icons/close";
 import SaveIcon from "../icons/saveIcon";
 import Swal from "sweetalert2";
 
-const url_add = "http://localhost/API/idiomas/functions.php";
+const url_add = "http://10.144.13.5/API/idiomas/functions.php";
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {
@@ -68,10 +68,6 @@ const LanguageS = () => {
     }
   }
 
-  const closeLanguage = () => {
-    setIsLanguage(false)
-  }
-
   const showAdd = () => {
     setIsAdd(true)
   }
@@ -111,7 +107,7 @@ const LanguageS = () => {
         title: 'Éxito',
         text: respuesta.success,
       });
-      setData(); // Actualiza la lista después de agregar
+      setData() // Actualiza la lista después de agregar
     }
     setNewLanguage('');
     setNewCost('');

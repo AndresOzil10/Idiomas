@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Trash from '../icons/trash'
 import Swal from 'sweetalert2'
 
-const url = "http://localhost/API/idiomas/functions.php"
+const url = "http://10.144.13.5/API/idiomas/functions.php"
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {

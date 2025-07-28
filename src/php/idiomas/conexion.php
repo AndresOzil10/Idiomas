@@ -7,7 +7,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 function conectarDB(){
 
-	$servidor = "localhost";
+	$servidor = "10.144.13.5";
 	$usuario = "root";
 	$password = "";
 	$bd = "control";

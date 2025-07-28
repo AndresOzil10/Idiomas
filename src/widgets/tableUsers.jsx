@@ -6,8 +6,8 @@ import EditIcon from "../icons/edit";
 import Trash from "../icons/trash";
 import Swal from "sweetalert2";
 
-const url_login = "http://localhost/API/idiomas/users.php";
-const url = "http://localhost/API/idiomas/functions.php";
+const url_login = "http://10.144.13.5/API/idiomas/users.php";
+const url = "http://10.144.13.5/API/idiomas/functions.php";
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {

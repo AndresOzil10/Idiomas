@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2"
 
-const url_login = "http://localhost/API/idiomas/functions.php"
+const url_login = "http://10.144.13.5/API/idiomas/functions.php"
 
 const enviarData = async (url, data) => {
   const resp = await fetch(url, {

@@ -9,7 +9,7 @@ import Trash from "../icons/trash";
 
 import { Form, Table, Pagination } from "antd";
 
-const url_add = "http://localhost/API/idiomas/functions.php";
+const url_add = "http://10.144.13.5/API/idiomas/functions.php";
 
 const enviarData = async (url, data) => {
     const resp = await fetch(url, {
